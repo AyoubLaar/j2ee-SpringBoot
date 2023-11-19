@@ -28,12 +28,7 @@ import java.util.List;
 public class Medecin {
 
     @Id
-    @SequenceGenerator(
-            name = "medecin_gen",
-            sequenceName = "medecin_gen",
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "medecin_gen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long MedecinId;
     @Column(
             nullable = false,
@@ -73,7 +68,17 @@ public class Medecin {
     )
     private List<RendezVous> mesrendezvous;
 
-    @ElementCollection
+    @ManyToMany
+    @JoinTable(
+            name = "medecin_spécialité",
+            joinColumns = @JoinColumn(name = "medecin_id",
+                    referencedColumnName ="MedecinId"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "nomSpecialite",
+                    referencedColumnName = "nomDuSpecialite"
+            )
+    )
     private List<Specialite> specialites;
 
     @Embedded
