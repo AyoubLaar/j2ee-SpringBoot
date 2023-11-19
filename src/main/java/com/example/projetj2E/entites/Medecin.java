@@ -86,7 +86,6 @@ public class Medecin {
 
     @Enumerated(EnumType.STRING)
     private EtatDemandeMedecin statusDemande;
-
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
 

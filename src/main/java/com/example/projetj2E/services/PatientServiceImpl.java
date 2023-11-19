@@ -17,13 +17,13 @@ public class PatientServiceImpl implements PatientServices{
 
     @Override
     public Patient savePatient(PatientModel patientModel) {
-              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
               Patient patient=new Patient();
               patient.setPatientLogin(patientModel.getPatientLogin());
               patient.setNom(patientModel.getNom());
               patient.setPrenom(patientModel.getPrenom());
-              patient.setDateDeNaissance(LocalDate.parse(patientModel.getDateDeNaissance(),formatter));
+              patient.setDateDeNaissance(patientModel.getDateDeNaissance());
               patient.setSexe(patientModel.getSexe());
               patient.setPassword(patientModel.getPassword());
               patient.setTelephone(patientModel.getTelephone());

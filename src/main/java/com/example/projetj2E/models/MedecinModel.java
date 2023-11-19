@@ -2,8 +2,8 @@ package com.example.projetj2E.models;
 
 
 import com.example.projetj2E.entites.Sexe;
+import com.example.projetj2E.entites.Ville;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,16 +12,16 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class PatientModel {
+public class MedecinModel {
 
-    private String nom;
-    private String prenom;
-    private String patientLogin;
+    private String medLogin;
     private String password;
     private String confirmedPassword;
+    private String nom;
+    private String prenom;
     private LocalDate dateDeNaissance;
-    private String telephone;
+    private String codeOrdreMedecin;
+    private Ville ville;
+    private String adressCabinet;
     private Sexe sexe;
-
 }
