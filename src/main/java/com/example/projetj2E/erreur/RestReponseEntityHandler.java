@@ -14,10 +14,19 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestReponseEntityHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(GereExistEmailException.class)
-    public ResponseEntity<MessageErreur> GereExistEmailException(GereExistEmailException exception, WebRequest webRequest){
+    public ResponseEntity<MessageErreur> GereExistEmailException(GereExistEmailException exception){
                      MessageErreur message=new MessageErreur(HttpStatus.CONFLICT
                              ,exception.getMessage());
 
                      return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+    }
+
+    @ExceptionHandler(HandleIncorrectAuthentification.class)
+    public ResponseEntity<MessageErreur> HandleIncorrectAuthentification(HandleIncorrectAuthentification exception){
+
+        MessageErreur message=new MessageErreur(HttpStatus.UNAUTHORIZED
+                ,exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
 }

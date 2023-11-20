@@ -35,9 +35,7 @@ public class RendezVous {
             referencedColumnName = " MedecinId"
     )
     private Medecin medecin;
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
+    @ManyToOne
     @JoinColumn(
             name = "patient_id",
             referencedColumnName = " patientId"

@@ -9,7 +9,7 @@ public class HassingAndMatchingTester {
 
     }
 
-    public static boolean passwordMatchin(String hashedPassword,String password) {
+    public static boolean passwordMatching(String hashedPassword,String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(password, hashedPassword);
     }

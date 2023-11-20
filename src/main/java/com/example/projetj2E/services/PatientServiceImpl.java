@@ -2,6 +2,9 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.entites.Sexe;
+import com.example.projetj2E.erreur.GereExistEmailException;
+import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.PatientModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.PatientRepository;
@@ -18,22 +21,32 @@ public class PatientServiceImpl implements PatientServices{
     private PatientRepository patientRepository;
 
     @Override
-    public Patient savePatient(PatientModel patientModel) {
+    public Patient savePatient(PatientModel patientModel) throws GereExistEmailException {
               Patient patient=new Patient();
-              patient.setPatientLogin(patientModel.getPatientLogin());
               patient.setNom(patientModel.getNom());
               patient.setPrenom(patientModel.getPrenom());
               patient.setDateDeNaissance(patientModel.getDateDeNaissance());
               patient.setSexe(patientModel.getSexe());
-              patient.setPassword(patientModel.getPassword());
+              patient.setPassword(HassingAndMatchingTester.passwordtohash(patientModel.getPassword()));
               patient.setTelephone(patientModel.getTelephone());
+              if(patientRepository.findBypatientLogin(patientModel.getPatientLogin()).isPresent()){
+                  throw  new GereExistEmailException("il y a déja un utilisateur avec cet email");
+              }
+              patient.setPatientLogin(patientModel.getPatientLogin());
               patientRepository.save(patient);
               return patient;
     }
 
     @Override
-    public String authentifierUser(User patient) {
+    public String authentifierUser(User patient) throws HandleIncorrectAuthentification {
         Optional<Patient> optionalPatient = patientRepository.findBypatientLogin(patient.getLogin());
-        return optionalPatient.toString();
+        if(optionalPatient.isPresent()){
+            String userPassword=optionalPatient.get().getPassword();
+            if(!HassingAndMatchingTester.passwordMatching(userPassword, patient.getPassword()))
+            {throw new HandleIncorrectAuthentification("votre mot de passe ou login n'est pas correct");}
+
+            return "sessionid";
+        }
+        throw new HandleIncorrectAuthentification("votre mot de passe ou login n'est pas correct");
     }
 }
