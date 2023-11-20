@@ -19,7 +19,6 @@ public class PatientModel {
     private String prenom;
     private String patientLogin;
     private String password;
-    private String confirmedPassword;
     private LocalDate dateDeNaissance;
     private String telephone;
     private Sexe sexe;

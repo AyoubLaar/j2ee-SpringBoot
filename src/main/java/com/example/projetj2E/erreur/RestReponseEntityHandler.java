@@ -29,4 +29,13 @@ public class RestReponseEntityHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
+    @ExceptionHandler(GereMedecinNotFound.class)
+    public ResponseEntity<MessageErreur> GereMedecinNotFound( GereMedecinNotFound exception){
+
+        MessageErreur message=new MessageErreur(HttpStatus.NOT_FOUND
+                ,exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
+
 }

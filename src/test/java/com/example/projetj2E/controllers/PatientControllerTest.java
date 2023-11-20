@@ -61,7 +61,6 @@ class PatientControllerTest {
                 .sexe(Sexe.Homme)
                 .telephone("0505084899")
                 .password("cissepape")
-                .confirmedPassword("cissepape")
                 .build();
                 Mockito.when(patientServices.savePatient(patientModelinput)).thenReturn(patient);
 

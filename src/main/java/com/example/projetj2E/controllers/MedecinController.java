@@ -2,7 +2,10 @@ package com.example.projetj2E.controllers;
 
 
 import com.example.projetj2E.entites.Medecin;
+import com.example.projetj2E.erreur.GereExistEmailException;
+import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.models.MedecinModel;
+import com.example.projetj2E.models.User;
 import com.example.projetj2E.services.MedecinServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +23,17 @@ public class MedecinController {
     private MedecinServices medecinServices;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerMedecin(@RequestBody MedecinModel medecinModel) {
+    public ResponseEntity<String> registerMedecin(@RequestBody MedecinModel medecinModel) throws GereExistEmailException {
         Medecin medecin = medecinServices.registerMedecin(medecinModel);
         return ResponseEntity.status(HttpStatus.OK).body("Succes");
     }
+
+    @PostMapping("/signin")
+    @CrossOrigin
+    public String authentifierUser(@RequestBody User medecin) throws HandleIncorrectAuthentification {
+        return medecinServices.authentifierUser(medecin);
+
+    }
+
 
 }

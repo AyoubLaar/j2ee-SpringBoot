@@ -1,11 +1,14 @@
 package com.example.projetj2E.services;
 
+import com.example.projetj2E.entites.Etatrdv;
 import com.example.projetj2E.entites.Patient;
+import com.example.projetj2E.entites.RendezVous;
 import com.example.projetj2E.entites.Sexe;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.PatientModel;
+import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class PatientServiceImpl implements PatientServices{
     @Autowired
     private PatientRepository patientRepository;
+
+
 
     @Override
     public Patient savePatient(PatientModel patientModel) throws GereExistEmailException {
@@ -48,5 +53,15 @@ public class PatientServiceImpl implements PatientServices{
             return "sessionid";
         }
         throw new HandleIncorrectAuthentification("votre mot de passe ou login n'est pas correct");
+    }
+
+    @Override
+    public void choisirUnRdv(RdvModel rdvModel) {
+
+        RendezVous rendezVous=new RendezVous();
+        rendezVous.setRdvId(rdvModel.getMedecinId());
+        rendezVous.setHeureRdv(rdvModel.getHeureRdv());
+        rendezVous.setDateRdv(rdvModel.getDateRdv());
+        rendezVous.setStatusRdv(Etatrdv.Attente);
     }
 }

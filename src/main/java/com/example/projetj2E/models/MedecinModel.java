@@ -17,7 +17,6 @@ public class MedecinModel {
 
     private String medLogin;
     private String password;
-    private String confirmedPassword;
     private String nom;
     private String prenom;
     private LocalDate dateDeNaissance;

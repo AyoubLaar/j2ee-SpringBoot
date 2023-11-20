@@ -4,6 +4,7 @@ import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.models.PatientModel;
+import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.services.PatientServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class PatientController {
                         Patient patient = patientServices.savePatient(patientModel);
 
                 map.put("token","success");
-                return ResponseEntity.status(200).body(map);
+                return ResponseEntity.status(200).body("sessionid");
         }
 
         @PostMapping("/signin")
@@ -38,4 +39,13 @@ public class PatientController {
                  return patientServices.authentifierUser(patient);
 
         }
+
+        @PostMapping("/rendezvous")
+        @CrossOrigin
+        public String choisirUnRdv(@RequestBody RdvModel rdvModel){
+                patientServices.choisirUnRdv(rdvModel);
+                return "a demain";
+        }
+
+
 }

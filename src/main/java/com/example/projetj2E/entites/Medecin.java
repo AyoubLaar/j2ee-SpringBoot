@@ -72,7 +72,9 @@ public class Medecin {
     )
     private List<RendezVous> mesrendezvous;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.EAGER
+    )
     @JoinTable(
             name = "medecin_spécialité",
             joinColumns = @JoinColumn(name = "medecin_id",
