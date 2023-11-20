@@ -24,4 +24,6 @@ public class Admin {
             nullable = false
     )
     private String password;
+
+    private String sessionId;
 }
