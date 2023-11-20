@@ -43,7 +43,8 @@ class SpecialiteControllerIntegrationTest {
                 "/api/v1/specialites",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<String>>() {}
+                new ParameterizedTypeReference<>() {
+                }
         );
 
         // Vérifier le statut de la réponse

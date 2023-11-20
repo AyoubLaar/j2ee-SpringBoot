@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 @WebMvcTest(PatientController.class)
 class PatientControllerTest {
@@ -66,17 +66,18 @@ class PatientControllerTest {
                 Mockito.when(patientServices.savePatient(patientModelinput)).thenReturn(patient);
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/patient/signup").
-                        contentType(MediaType.APPLICATION_JSON).content("{\n" +
-                                "    \"patientLogin\":\"cissepapewaly@gmail.com\",\n" +
-                                "    \"password\":\"cissepape\",\n" +
-                                "    \"confirmedPassword\":\"cissepape\",\n" +
-                                "    \"nom\":\"cisse\",\n" +
-                                "    \"prenom\":\"pape waly\",\n" +
-                                "    \"dateDeNaissance\":\"2005-08-23\",\n" +
-                                "    \"telephone\":\"0505084899\",\n" +
-                                "    \"sexe\":\"Homme\"\n" +
-                                "\n" +
-                                "}")).andExpect(MockMvcResultMatchers.status().isOk());
+                        contentType(MediaType.APPLICATION_JSON).content("""
+                                {
+                                    "patientLogin":"cissepapewaly@gmail.com",
+                                    "password":"cissepape",
+                                    "confirmedPassword":"cissepape",
+                                    "nom":"cisse",
+                                    "prenom":"pape waly",
+                                    "dateDeNaissance":"2005-08-23",
+                                    "telephone":"0505084899",
+                                    "sexe":"Homme"
+
+                                }""")).andExpect(MockMvcResultMatchers.status().isOk());
 
 
     }
