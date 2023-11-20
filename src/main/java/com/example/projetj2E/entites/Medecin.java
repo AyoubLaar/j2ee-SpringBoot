@@ -30,20 +30,24 @@ public class Medecin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long MedecinId;
+
     @Column(
             nullable = false,
             updatable = false
     )
     private String medLogin;
+
     @Column(
             nullable = false,
             updatable = false
     )
     private String password;
+
     @Column(
             nullable = false
     )
     private String nom;
+
     @Column(
             nullable = false,
             updatable = false
@@ -91,7 +95,10 @@ public class Medecin {
 
     @Enumerated(EnumType.STRING)
     private EtatDemandeMedecin statusDemande;
+
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
+
+    private String sessionId;
 
 }

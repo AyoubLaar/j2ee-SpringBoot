@@ -1,37 +1,39 @@
 package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Patient;
-import com.example.projetj2E.erreur.GereExistEmailException;
-import com.example.projetj2E.hassing.HassingAndMatchingTester;
+import com.example.projetj2E.entites.Sexe;
 import com.example.projetj2E.models.PatientModel;
+import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements PatientServices{
-
-    private final PatientRepository patientRepository;
-
-    public  PatientServiceImpl(PatientRepository patientRepository){
-        this.patientRepository=patientRepository;
-    }
+    @Autowired
+    private PatientRepository patientRepository;
 
     @Override
-    public Patient savePatient(PatientModel patientModel) throws GereExistEmailException {
-
+    public Patient savePatient(PatientModel patientModel) {
               Patient patient=new Patient();
+              patient.setPatientLogin(patientModel.getPatientLogin());
               patient.setNom(patientModel.getNom());
               patient.setPrenom(patientModel.getPrenom());
               patient.setDateDeNaissance(patientModel.getDateDeNaissance());
               patient.setSexe(patientModel.getSexe());
-              patient.setPassword(HassingAndMatchingTester.passwordtohash(patientModel.getPassword()));
+              patient.setPassword(patientModel.getPassword());
               patient.setTelephone(patientModel.getTelephone());
-              if(patientRepository.existsByPatientLogin(patientModel.getPatientLogin())){
-                      throw new GereExistEmailException("il y a déja un utilisateur avec cet email");
-              }
-              patient.setPatientLogin(patientModel.getPatientLogin());
               patientRepository.save(patient);
-
               return patient;
+    }
+
+    @Override
+    public String authentifierUser(User patient) {
+        Optional<Patient> optionalPatient = patientRepository.findBypatientLogin(patient.getLogin());
+        return optionalPatient.toString();
     }
 }
