@@ -2,7 +2,6 @@ package com.example.projetj2E.models;
 
 
 import com.example.projetj2E.entites.Sexe;
-import com.example.projetj2E.entites.Specialite;
 import com.example.projetj2E.entites.Ville;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,7 +7,6 @@ import com.example.projetj2E.entites.Specialite;
 import com.example.projetj2E.models.MedecinModel;
 import com.example.projetj2E.repository.MedecinRepository;
 import com.example.projetj2E.repository.SpecialiteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,19 +14,23 @@ import java.util.Optional;
 
 @Service
 public class MedecinServicesImpl implements MedecinServices {
-    @Autowired
-    private MedecinRepository medecinRepository;
+    private final MedecinRepository medecinRepository;
 
-    @Autowired
-     private  SpecialiteService specialiteService;
+    private final SpecialiteService specialiteService;
 
-    @Autowired
-    private SpecialiteRepository specialiteRepository;
+    private final SpecialiteRepository specialiteRepository;
+
+    public MedecinServicesImpl(MedecinRepository medecinRepository, SpecialiteService specialiteService, SpecialiteRepository specialiteRepository) {
+        this.medecinRepository = medecinRepository;
+        this.specialiteService = specialiteService;
+        this.specialiteRepository = specialiteRepository;
+    }
+
     @Override
     public Medecin registerMedecin(MedecinModel medecinModel) {
 
 
-              Medecin medecin=new Medecin();
+        Medecin medecin=new Medecin();
               medecin.setAdressCabinet(medecinModel.getAdressCabinet());
               medecin.setCodeOrdreMedecin(medecinModel.getCodeOrdreMedecin());
               medecin.setNom(medecinModel.getNom());

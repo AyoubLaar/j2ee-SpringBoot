@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface SpecialiteService {
 
-    public List<Specialite> returnSpecialites(List<String> nomsSpecialites, Optional<Medecin> medecin);
+    List<Specialite> returnSpecialites(List<String> nomsSpecialites, Optional<Medecin> medecin);
 
     List<String> getAllSpecialites();
 }

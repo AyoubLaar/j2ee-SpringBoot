@@ -5,4 +5,6 @@ import com.example.projetj2E.models.MedecinModel;
 
 public interface MedecinServices {
     Medecin registerMedecin(MedecinModel medecinModel);
+
+
 }

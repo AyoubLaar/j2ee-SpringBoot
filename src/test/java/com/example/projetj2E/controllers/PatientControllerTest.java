@@ -43,7 +43,7 @@ class PatientControllerTest {
                     .nom("cisse")
                     .prenom("pape waly")
                     .dateDeNaissance(LocalDate.parse("23/08/2005",formatter))
-                    .sexe(Sexe.valueOf("Homme"))
+                    .sexe(Sexe.Homme)
                     .telephone("0505084899")
                     .password("cissepape")
                     .build();
@@ -52,27 +52,27 @@ class PatientControllerTest {
     @SneakyThrows
     @Test
     void savePatient() {
-      PatientModel  patientModelinput =PatientModel.builder()
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        PatientModel  patientModelinput =PatientModel.builder()
                 .patientLogin("cissepapewaly@gmail.com")
                 .nom("cisse")
                 .prenom("pape waly")
-                .dateDeNaissance("23/08/2005")
-                .sexe(Sexe.Homme
-                )
+                .dateDeNaissance(LocalDate.parse("23/08/2005",formatter))
+                .sexe(Sexe.Homme)
                 .telephone("0505084899")
                 .password("cissepape")
                 .confirmedPassword("cissepape")
                 .build();
                 Mockito.when(patientServices.savePatient(patientModelinput)).thenReturn(patient);
 
-                mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/patients").
+                mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/patient/signup").
                         contentType(MediaType.APPLICATION_JSON).content("{\n" +
                                 "    \"patientLogin\":\"cissepapewaly@gmail.com\",\n" +
                                 "    \"password\":\"cissepape\",\n" +
                                 "    \"confirmedPassword\":\"cissepape\",\n" +
                                 "    \"nom\":\"cisse\",\n" +
                                 "    \"prenom\":\"pape waly\",\n" +
-                                "    \"dateDeNaissance\":\"23/08/2005\",\n" +
+                                "    \"dateDeNaissance\":\"2005-08-23\",\n" +
                                 "    \"telephone\":\"0505084899\",\n" +
                                 "    \"sexe\":\"Homme\"\n" +
                                 "\n" +
