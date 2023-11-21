@@ -13,12 +13,12 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class SpecialiteController {
 
-         @Autowired
-         private SpecialiteService specialiteService;
+    @Autowired
+    private SpecialiteService specialiteService;
 
-         @GetMapping("/specialites")
-         public List<String> getAllSpecialites(){
-             List<String> specialites=specialiteService.getAllSpecialites();
-             return specialites;
-         }
+    @GetMapping("/specialites")
+    public List<String> getAllSpecialites(){
+        List<String> specialites=specialiteService.getAllSpecialites();
+        return specialites;
+    }
 }

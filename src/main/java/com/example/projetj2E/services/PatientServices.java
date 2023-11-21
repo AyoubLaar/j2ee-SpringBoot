@@ -2,6 +2,7 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.erreur.GereExistEmailException;
+import com.example.projetj2E.erreur.GereMedecinNotFound;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.PatientModel;
@@ -14,5 +15,8 @@ public interface PatientServices {
     ResponseEntity<String> savePatient(PatientModel patientModel) throws GereExistEmailException;
     ResponseEntity<String> authentifierUser(User patient) throws HandleIncorrectAuthentification, UserNotFoundException;
 
-    ResponseEntity<String> prendreRendezvous(RdvModel rdvModel);
+
+
+
+    ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws GereMedecinNotFound, UserNotFoundException;
 }

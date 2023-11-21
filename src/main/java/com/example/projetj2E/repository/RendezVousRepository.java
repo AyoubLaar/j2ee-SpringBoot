@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface RendezVousRepository extends JpaRepository<RendezVous,Long> {
 
-   List<RendezVous> findAllByDateRdvAndAndHeureRdvAndStatusRdv(LocalDate daterdv, LocalTime heureRdv, Etatrdv etatrdv);
+    List<RendezVous> findAllByDateRdvAndAndHeureRdvAndStatusRdv(LocalDate daterdv, LocalTime heureRdv, Etatrdv etatrdv);
 }
+

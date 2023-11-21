@@ -40,7 +40,7 @@ public class AuthentificationServiceImple implements AuthentificationService {
     public Patient toPatient(String jeton) throws UserNotFoundException {
         String message = HassingAndMatchingTester.decrypt(jeton);
         String [] split_message = message.split(":");
-        if(split_message[1] != "patient")throw new UserNotFoundException("pas un patient!");
+        if(!split_message[0].equals("patient")){throw new UserNotFoundException("pas un patient!");}
         Optional<Patient> optional_patient = patientRepository.findBypatientLogin(split_message[1]);
         if(optional_patient.isEmpty())throw new UserNotFoundException("email inexistant!");
         return optional_patient.get();

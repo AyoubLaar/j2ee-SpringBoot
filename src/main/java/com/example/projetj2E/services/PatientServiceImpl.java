@@ -1,18 +1,25 @@
 package com.example.projetj2E.services;
 
+import com.example.projetj2E.entites.Etatrdv;
+import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.entites.Patient;
+import com.example.projetj2E.entites.RendezVous;
 import com.example.projetj2E.erreur.GereExistEmailException;
+import com.example.projetj2E.erreur.GereMedecinNotFound;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.PatientModel;
 import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
+import com.example.projetj2E.repository.MedecinRepository;
 import com.example.projetj2E.repository.PatientRepository;
+import com.example.projetj2E.repository.RendezVousRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -22,6 +29,11 @@ public class PatientServiceImpl implements PatientServices{
 
     @Autowired
     private AuthentificationService authentificationService;
+    @Autowired
+    private RendezVousRepository rendezVousRepository;
+
+    @Autowired
+    private MedecinRepository medecinRepository;
     @Override
     public ResponseEntity<String> savePatient(PatientModel patientModel) throws GereExistEmailException {
         if(patientRepository.findBypatientLogin(patientModel.getPatientLogin()).isPresent()){
@@ -61,13 +73,27 @@ public class PatientServiceImpl implements PatientServices{
             }
             return ResponseEntity.ok(sessionId);
         }else{
-                throw new UserNotFoundException("email inexistant!");
-            }
+            throw new UserNotFoundException("email inexistant!");
         }
-    @Override
-    public ResponseEntity<String> prendreRendezvous(RdvModel rdvModel) {
-        return ResponseEntity.ok("not yet functionning");
     }
-}
 
+    @Override
+    public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws GereMedecinNotFound, UserNotFoundException {
+        Optional<Medecin> medecin=medecinRepository.findById(rdvModel.getMedecinId());
+        if(medecin.isEmpty()){
+            throw  new GereMedecinNotFound("medecin n'est pas trouver");
+        }
+        Patient patient=authentificationService.toPatient(sessionId);
+        RendezVous rendezVous=new RendezVous();
+        rendezVous.setHeureRdv(LocalTime.of(Integer.parseInt(rdvModel.getHeureRdv()),0));
+        rendezVous.setDateRdv(rdvModel.getDateRdv());
+        rendezVous.setStatusRdv(Etatrdv.Attente);
+        rendezVousRepository.save(rendezVous);
+        rendezVous.setMedecin(medecin.get());
+        rendezVous.setPatient(patient);
+        rendezVousRepository.save(rendezVous);
+        return ResponseEntity.status(200).body("saved");
+    }
+
+}
 

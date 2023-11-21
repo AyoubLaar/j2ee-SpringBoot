@@ -35,5 +35,10 @@ public class MedecinController {
 
     }
 
+   /* @PostMapping("/mesdemandes/rdv")
+    public ResponseEntity<String>  accepter(@RequestHeader("token") String sessionid,@RequestBody RdvModel rdvModel){
+
+    }
+  */
 
 }
