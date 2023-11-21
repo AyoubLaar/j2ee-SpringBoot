@@ -61,7 +61,7 @@ public class HassingAndMatchingTester {
         return salted_input.substring(salt.length());
     }catch (Exception e){
         e.printStackTrace();
-        return null;
+        return "";
     }
     }
 

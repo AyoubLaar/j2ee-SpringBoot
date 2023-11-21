@@ -26,12 +26,8 @@ public class PatientController {
 
         @PostMapping(value = "/signup" , produces = MediaType.APPLICATION_JSON_VALUE)
         @CrossOrigin
-        public ResponseEntity<Object> savePatient(@RequestBody PatientModel patientModel) throws GereExistEmailException {
-                Map<String,String> map = new HashMap<>();
-                ResponseEntity<String> patient = patientServices.savePatient(patientModel);
-
-                map.put("token","success");
-                return ResponseEntity.status(200).body("sessionid");
+        public ResponseEntity<String> savePatient(@RequestBody PatientModel patientModel) throws GereExistEmailException {
+                return patientServices.savePatient(patientModel);
         }
 
         @PostMapping("/signin")
