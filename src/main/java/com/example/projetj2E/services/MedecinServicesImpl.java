@@ -50,8 +50,8 @@ public class MedecinServicesImpl implements MedecinServices {
             throw new GereExistEmailException("il y a déja un utilisateur avec cet email");
         }
         medecin.setMedLogin(medecinModel.getMedLogin());
-       // medecinRepository.save(medecin);
-       // Optional<Medecin> medecinsaved = medecinRepository.findByMedLogin(medecinModel.getMedLogin());
+        // medecinRepository.save(medecin);
+        // Optional<Medecin> medecinsaved = medecinRepository.findByMedLogin(medecinModel.getMedLogin());
         List<Specialite> specialites = specialiteService.returnSpecialites(medecinModel.getSpecialites());
         specialiteRepository.saveAll(specialites);// a éliminer seulement pour tester
         medecin.setSpecialites(specialites);

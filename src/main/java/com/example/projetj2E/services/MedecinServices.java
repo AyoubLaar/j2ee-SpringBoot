@@ -4,6 +4,7 @@ import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.GereMedecinNotFound;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.MedecinModel;
 import com.example.projetj2E.models.MedecinToSearch;
 import com.example.projetj2E.models.User;

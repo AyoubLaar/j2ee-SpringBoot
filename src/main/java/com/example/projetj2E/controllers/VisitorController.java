@@ -15,12 +15,12 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1")
 @CrossOrigin
-public class TrouverDoctor {
+public class VisitorController {
 
 
     private final MedecinServices medecinServices;
 
-    public TrouverDoctor(MedecinServices medecinServices) {
+    public VisitorController(MedecinServices medecinServices) {
         this.medecinServices = medecinServices;
     }
 
