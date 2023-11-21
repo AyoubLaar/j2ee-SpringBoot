@@ -24,7 +24,7 @@ public class AuthentificationServiceImple implements AuthentificationService {
 
     @Override
     public String creerSessionIdPourPatient(String email){
-        String message = "patient:"+email+":"+LocalDate.now().toString();
+        String message = "patient:"+email+":"+LocalDateTime.now().toString();
         String sessionId = HassingAndMatchingTester.encrypt(message);
         return sessionId;
     }
