@@ -19,7 +19,7 @@ public interface MedecinServices {
     Medecin registerMedecin(MedecinModel medecinModel) throws GereExistEmailException;
 
 
-    String authentifierUser(User medecin) throws HandleIncorrectAuthentification;
+    ResponseEntity<String> authentifierUser(User medecin) throws HandleIncorrectAuthentification, UserNotFoundException;
 
     ResponseEntity<Object> rechercherMedecin(MedecinToSearch medecinToSearch) throws GereMedecinNotFound;
 

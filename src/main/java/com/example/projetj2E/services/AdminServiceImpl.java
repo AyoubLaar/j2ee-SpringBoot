@@ -1,29 +1,40 @@
 package com.example.projetj2E.services;
 
+import com.example.projetj2E.entites.Admin;
 import com.example.projetj2E.entites.Medecin;
+import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.entites.Ville;
 import com.example.projetj2E.erreur.GereMedecinNotFound;
+import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.UserNotFoundException;
+import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.MedecinToDelete;
 import com.example.projetj2E.models.MedecinToSearch;
+import com.example.projetj2E.models.User;
+import com.example.projetj2E.repository.AdminRepository;
 import com.example.projetj2E.repository.MedecinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
 public class AdminServiceImpl implements AdminService{
+
+    @Autowired
+    private AdminRepository adminRepository;
+
     @Autowired
     private MedecinRepository medecinRepository;
 
     @Autowired
     private SpecialiteService specialiteService;
+
+    @Autowired
+    private AuthentificationService authentificationService;
     @Override
     public void supprimerMedecin(MedecinToSearch medecinToSearch)  {
 
@@ -53,5 +64,29 @@ public class AdminServiceImpl implements AdminService{
             medecinstrouves.add(medecin_json);
         }
         return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
+    }
+
+    @Override
+    public ResponseEntity<String> authentifierUser(User user) throws HandleIncorrectAuthentification, UserNotFoundException {
+        Optional<Admin> optionalAdmin = adminRepository.findBylogin(user.getLogin());
+        if(optionalAdmin.isPresent()){
+            Admin admin  = optionalAdmin.get();
+            String password=admin.getPassword();
+            if(!HassingAndMatchingTester.passwordMatching(password, user.getPassword()))
+            {
+                throw new HandleIncorrectAuthentification("données invalide!");
+            }
+            String sessionId = authentificationService.creerSessionIdPourPatient(admin.getLogin());
+            admin.setSessionId(sessionId);
+            try {
+                adminRepository.save(admin);
+            }catch (Exception e) {
+                System.out.println(e.getMessage());
+                return ResponseEntity.badRequest().body("ERROR");
+            }
+            return ResponseEntity.ok(sessionId);
+        }else{
+            throw new UserNotFoundException("email inexistant!");
+        }
     }
 }

@@ -32,7 +32,7 @@ public class MedecinController {
 
     @PostMapping("/signin")
     @CrossOrigin
-    public String authentifierUser(@RequestBody User medecin) throws HandleIncorrectAuthentification {
+    public ResponseEntity<String> authentifierUser(@RequestBody User medecin) throws HandleIncorrectAuthentification, UserNotFoundException {
         return medecinServices.authentifierUser(medecin);
 
     }

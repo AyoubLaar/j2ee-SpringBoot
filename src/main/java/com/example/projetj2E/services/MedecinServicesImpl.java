@@ -68,17 +68,27 @@ public class MedecinServicesImpl implements MedecinServices {
     }
 
     @Override
-    public String authentifierUser(User medecin) throws HandleIncorrectAuthentification {
+    public ResponseEntity<String> authentifierUser(User medecin) throws HandleIncorrectAuthentification, UserNotFoundException {
         Optional<Medecin> optionalMedecin = medecinRepository.findByMedLogin(medecin.getLogin());
         if (optionalMedecin.isPresent()) {
-            String userPassword = optionalMedecin.get().getPassword();
+            Medecin medecinfound=optionalMedecin.get();
+            String userPassword = medecinfound.getPassword();
             if (!HassingAndMatchingTester.passwordMatching(userPassword, medecin.getPassword())) {
                 throw new HandleIncorrectAuthentification("votre mot de passe ou login n'est pas correct");
             }
-
-            return "sessionid";
+            String sessionId = authentificationService.creerSessionIdPourMedecin(optionalMedecin.get().getMedLogin());
+            medecinfound.setSessionId(sessionId);
+            try {
+                medecinRepository.save(medecinfound);
+            }catch (Exception e) {
+                System.out.println(e.getMessage());
+                return ResponseEntity.badRequest().body("ERROR");
+            }
+            return ResponseEntity.ok(sessionId);
+        }else{
+            throw new UserNotFoundException("email inexistant!");
         }
-        throw new HandleIncorrectAuthentification("votre mot de passe ou login n'est pas correct");
+
     }
 
     @Override

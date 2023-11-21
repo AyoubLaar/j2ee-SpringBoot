@@ -50,7 +50,7 @@ public class AuthentificationServiceImple implements AuthentificationService {
     public Patient toPatient(String sessionId) throws UserNotFoundException {
         String message = HassingAndMatchingTester.decrypt(sessionId);
         String [] split_message = message.split(":");
-        if(!Objects.equals(split_message[1], "patient"))throw new UserNotFoundException("pas un patient!");
+        if(!Objects.equals(split_message[0], "patient"))throw new UserNotFoundException("pas un patient!");
         Optional<Patient> optional_patient = patientRepository.findBypatientLogin(split_message[1]);
         if(optional_patient.isEmpty())throw new UserNotFoundException("email inexistant!");
         Patient patient = optional_patient.get();
@@ -62,7 +62,7 @@ public class AuthentificationServiceImple implements AuthentificationService {
     public Medecin toMedecin(String sessionId) throws UserNotFoundException {
         String message = HassingAndMatchingTester.decrypt(sessionId);
         String [] split_message = message.split(":");
-        if(split_message[1] != "medecin")throw new UserNotFoundException("pas un medecin!");
+        if(!Objects.equals(split_message[0], "medecin"))throw new UserNotFoundException("pas un medecin!");
         Optional<Medecin> optional_medecin = medecinRepository.findByMedLogin(split_message[1]);
         if(optional_medecin.isEmpty())throw new UserNotFoundException("email inexistant!");
         Medecin medecin = optional_medecin.get();
@@ -73,7 +73,7 @@ public class AuthentificationServiceImple implements AuthentificationService {
     public Admin toAdmin(String sessionId) throws UserNotFoundException{
         String message = HassingAndMatchingTester.decrypt(sessionId);
         String [] split_message = message.split(":");
-        if(split_message[1] != "admin")throw new UserNotFoundException("pas l'admin!");
+        if(!Objects.equals(split_message[0], "admin"))throw new UserNotFoundException("pas l'admin!");
         Optional<Admin> optional_admin = adminRepository.findBylogin(split_message[1]);
         if(optional_admin.isEmpty())throw new UserNotFoundException("email inexistant!");
         Admin admin = optional_admin.get();

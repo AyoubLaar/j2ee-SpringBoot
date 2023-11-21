@@ -1,7 +1,10 @@
 package com.example.projetj2E.controllers;
 
 import com.example.projetj2E.erreur.GereMedecinNotFound;
+import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.MedecinToDelete;
+import com.example.projetj2E.models.User;
 import com.example.projetj2E.services.AdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,15 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     @Autowired
     private AdminServiceImpl adminService;
+
+    @PostMapping("/signin")
+    @CrossOrigin
+    public ResponseEntity<String> authentifierUser(@RequestBody User admin) throws HandleIncorrectAuthentification, UserNotFoundException {
+        return adminService.authentifierUser(admin);
+
+    }
+
+
     @PostMapping("/cherchermedecin")
     public ResponseEntity<Object> chercherMedecin(@RequestBody MedecinToDelete medecinToDelete) throws GereMedecinNotFound {
         return adminService.chercherMedecin(medecinToDelete);

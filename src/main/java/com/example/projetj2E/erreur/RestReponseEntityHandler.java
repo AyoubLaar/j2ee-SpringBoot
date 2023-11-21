@@ -37,5 +37,13 @@ public class RestReponseEntityHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<MessageErreur> UserNotFoundException( UserNotFoundException exception){
+
+        MessageErreur message=new MessageErreur(HttpStatus.NOT_FOUND
+                ,exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
 
 }
