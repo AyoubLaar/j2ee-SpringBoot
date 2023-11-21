@@ -74,4 +74,6 @@ public class Patient {
     private List<RendezVous> mesrendezvous;
 
     private String sessionId;
+
+    private Autorisation autorisation;
 }

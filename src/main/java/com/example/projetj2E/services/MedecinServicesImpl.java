@@ -5,15 +5,20 @@ import com.example.projetj2E.entites.*;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.GereMedecinNotFound;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.MedecinModel;
 import com.example.projetj2E.models.MedecinToSearch;
+import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.MedecinRepository;
+import com.example.projetj2E.repository.RendezVousRepository;
 import com.example.projetj2E.repository.SpecialiteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.*;
 
@@ -23,7 +28,9 @@ public class MedecinServicesImpl implements MedecinServices {
 
     private final SpecialiteService specialiteService;
 
-
+    @Autowired
+    private AuthentificationService authentificationService;
+    private RendezVousRepository rendezVousRepository;
     private final SpecialiteRepository specialiteRepository;
 
     public MedecinServicesImpl(MedecinRepository medecinRepository, SpecialiteService specialiteService, SpecialiteRepository specialiteRepository) {
@@ -121,5 +128,21 @@ public class MedecinServicesImpl implements MedecinServices {
         return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
 
 
+    }
+
+    @Override
+    public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException {
+           Medecin medecin= authentificationService.toMedecin(sessionid);
+           List<RendezVous> mesdemandes=rendezVousRepository.findAllByMedecinAndStatusRdv(medecin,Etatrdv.Attente);
+           List<Map<String, Object>> medemandestrouves= new ArrayList<>();
+           for (RendezVous demande : mesdemandes) {
+            Map<String, Object> Rendezvous_json = new HashMap<>();
+              Rendezvous_json.put("rdvId",demande.getRdvId());
+              Rendezvous_json.put("patient",demande.getPatient());
+              Rendezvous_json.put("dateRdv",demande.getDateRdv());
+              Rendezvous_json.put("heureRdv",demande.getHeureRdv());
+             medemandestrouves.add(Rendezvous_json);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(medemandestrouves);
     }
 }

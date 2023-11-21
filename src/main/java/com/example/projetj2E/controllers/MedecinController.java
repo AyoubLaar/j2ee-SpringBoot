@@ -4,7 +4,9 @@ package com.example.projetj2E.controllers;
 import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.MedecinModel;
+import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.services.MedecinServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +36,17 @@ public class MedecinController {
         return medecinServices.authentifierUser(medecin);
 
     }
+    @PostMapping("/dashboard/mesdemandes")
+    public ResponseEntity<Object>  mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException {
+              return medecinServices.mesDemandeDeRdv(sessionid);
+    }
 
-   /* @PostMapping("/mesdemandes/rdv")
+
+ /*  @PostMapping("/mesdemandes/rdv")
+   @CrossOrigin
     public ResponseEntity<String>  accepter(@RequestHeader("token") String sessionid,@RequestBody RdvModel rdvModel){
 
     }
-  */
 
+*/
 }

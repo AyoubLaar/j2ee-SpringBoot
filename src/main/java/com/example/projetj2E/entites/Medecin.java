@@ -103,4 +103,6 @@ public class Medecin {
 
     private String sessionId;
 
+    private Autorisation autorisation;
+
 }

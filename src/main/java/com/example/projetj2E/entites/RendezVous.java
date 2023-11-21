@@ -43,6 +43,7 @@ public class RendezVous {
     private Patient patient;
 
     @Enumerated(EnumType.STRING)
+
     private Etatrdv statusRdv;
 
 
