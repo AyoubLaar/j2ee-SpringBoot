@@ -4,13 +4,13 @@ import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
-import com.example.projetj2E.models.MedecinModel;
-import com.example.projetj2E.models.PatientModel;
 import com.example.projetj2E.repository.MedecinRepository;
 import com.example.projetj2E.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -24,14 +24,14 @@ public class AuthentificationServiceImple implements AuthentificationService {
 
     @Override
     public String creerSessionIdPourPatient(String email){
-        String message = "patient:"+email;
+        String message = "patient:"+email+":"+LocalDate.now().toString();
         String sessionId = HassingAndMatchingTester.encrypt(message);
         return sessionId;
     }
 
     @Override
     public String creerSessionIdPourMedecin(String email) {
-        String message = "medecin:"+email;
+        String message = "medecin:"+email+":"+ LocalDateTime.now().toString();
         String sessionId = HassingAndMatchingTester.encrypt(message);
         return sessionId;
     }
