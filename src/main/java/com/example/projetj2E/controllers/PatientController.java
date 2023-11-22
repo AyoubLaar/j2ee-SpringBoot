@@ -1,9 +1,9 @@
 package com.example.projetj2E.controllers;
 
 import com.example.projetj2E.erreur.GereExistEmailException;
-import com.example.projetj2E.erreur.GereMedecinNotFound;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
+import com.example.projetj2E.models.MedecinToSearch;
 import com.example.projetj2E.models.PatientModel;
 import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
@@ -13,8 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+
 
 @RestController
 @CrossOrigin
@@ -37,9 +36,16 @@ public class PatientController {
 
         }
 
-        @PostMapping("/rendezvous")
+        @PostMapping("dashboard/recherche")
         @CrossOrigin
-        public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws GereMedecinNotFound, UserNotFoundException {
+        public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, @RequestBody MedecinToSearch medecinToSearch) throws  UserNotFoundException {
+                return   patientServices.chercherMedecin(sessionid,medecinToSearch);
+
+        }
+
+        @PutMapping ("dashboard/recherche")
+        @CrossOrigin
+        public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws  UserNotFoundException {
                 return   patientServices.choisirUnRdv(sessionid,rdvModel);
 
         }

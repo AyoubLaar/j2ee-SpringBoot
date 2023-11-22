@@ -1,5 +1,5 @@
 package com.example.projetj2E.entites;
 
-public enum EtatDemandeMedecin {
+public enum StatusMedecin {
     Valider,Rejeter,Attente
 }

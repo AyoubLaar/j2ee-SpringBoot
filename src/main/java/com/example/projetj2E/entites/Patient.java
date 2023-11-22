@@ -69,11 +69,12 @@ public class Patient {
     private Sexe sexe;
 
     @OneToMany(
-           mappedBy = "patient"
+            mappedBy = "patient"
     )
     private List<RendezVous> mesrendezvous;
 
     private String sessionId;
 
+    @Enumerated(EnumType.STRING)
     private Autorisation autorisation;
 }

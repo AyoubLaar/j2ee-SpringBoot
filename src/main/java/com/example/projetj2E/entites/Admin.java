@@ -3,6 +3,7 @@ package com.example.projetj2E.entites;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,15 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Admin {
 
     @Id
-    @SequenceGenerator(
-            name = "admin_login",
-            sequenceName = "admin_login",
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "admin_login")
     private String login;
     @Column(
             nullable = false

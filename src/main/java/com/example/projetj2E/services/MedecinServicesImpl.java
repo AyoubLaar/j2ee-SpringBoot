@@ -3,16 +3,14 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.*;
 import com.example.projetj2E.erreur.GereExistEmailException;
-import com.example.projetj2E.erreur.GereMedecinNotFound;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.MedecinModel;
 import com.example.projetj2E.models.MedecinToSearch;
-import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.MedecinRepository;
-import com.example.projetj2E.repository.RendezVousRepository;
+
 import com.example.projetj2E.repository.SpecialiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,9 +26,11 @@ public class MedecinServicesImpl implements MedecinServices {
 
     private final SpecialiteService specialiteService;
 
+    private MedecinServices medecinServices;
+
     @Autowired
     private AuthentificationService authentificationService;
-    private RendezVousRepository rendezVousRepository;
+
     private final SpecialiteRepository specialiteRepository;
 
     public MedecinServicesImpl(MedecinRepository medecinRepository, SpecialiteService specialiteService, SpecialiteRepository specialiteRepository) {
@@ -40,9 +40,7 @@ public class MedecinServicesImpl implements MedecinServices {
     }
 
     @Override
-    public Medecin registerMedecin(MedecinModel medecinModel) throws GereExistEmailException {
-
-
+    public ResponseEntity<String> registerMedecin(MedecinModel medecinModel) throws GereExistEmailException {
         Medecin medecin = new Medecin();
         medecin.setAdressCabinet(medecinModel.getAdressCabinet());
         medecin.setCodeOrdreMedecin(medecinModel.getCodeOrdreMedecin());
@@ -52,19 +50,29 @@ public class MedecinServicesImpl implements MedecinServices {
         medecin.setPrenom(medecinModel.getPrenom());
         medecin.setVille(medecinModel.getVille());
         medecin.setDateDeNaissance(medecinModel.getDateDeNaissance());
-        medecin.setStatusDemande(EtatDemandeMedecin.Attente);
+        medecin.setStatusDemande(StatusMedecin.Attente);
         if ((medecinRepository.findByMedLogin(medecinModel.getMedLogin()).isPresent())) {
             throw new GereExistEmailException("il y a déja un utilisateur avec cet email");
         }
         medecin.setMedLogin(medecinModel.getMedLogin());
-        // medecinRepository.save(medecin);
-        // Optional<Medecin> medecinsaved = medecinRepository.findByMedLogin(medecinModel.getMedLogin());
+        medecin.setAutorisation(Autorisation.NonAutoriser);
         List<Specialite> specialites = specialiteService.returnSpecialites(medecinModel.getSpecialites());
         specialiteRepository.saveAll(specialites);// a éliminer seulement pour tester
         medecin.setSpecialites(specialites);
         medecinRepository.save(medecin);
-        return medecin;
+        return ResponseEntity.status(HttpStatus.OK).body("Succes");
 
+    }
+
+    @Override
+    public boolean verifyAuthentification(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+        Medecin medecin= authentificationService.toMedecin(sessionid);
+        User user= User.builder()
+                .login(medecin.getMedLogin())
+                .password(medecin.getPassword())
+                .build();
+        ResponseEntity<String> reponse  =medecinServices.authentifierUser(user);
+        return !Objects.equals(reponse.getBody(), sessionid);
     }
 
     @Override
@@ -73,8 +81,8 @@ public class MedecinServicesImpl implements MedecinServices {
         if (optionalMedecin.isPresent()) {
             Medecin medecinfound=optionalMedecin.get();
             String userPassword = medecinfound.getPassword();
-            if (!HassingAndMatchingTester.passwordMatching(userPassword, medecin.getPassword())) {
-                throw new HandleIncorrectAuthentification("votre mot de passe ou login n'est pas correct");
+            if (!HassingAndMatchingTester.passwordMatching(userPassword, medecin.getPassword()) || medecinfound.getAutorisation().equals(Autorisation.NonAutoriser) ) {
+                throw new HandleIncorrectAuthentification("Saisir des données correct ou votre compte a été  bloqué");
             }
             String sessionId = authentificationService.creerSessionIdPourMedecin(optionalMedecin.get().getMedLogin());
             medecinfound.setSessionId(sessionId);
@@ -91,67 +99,28 @@ public class MedecinServicesImpl implements MedecinServices {
 
     }
 
-    @Override
-    public ResponseEntity<Object> rechercherMedecin(MedecinToSearch medecinToSearch) throws GereMedecinNotFound {
-        Specialite medspecialite = Specialite.builder()
-                .nomDuSpecialite(medecinToSearch.getSpecialite())
-                .build();
-        Ville ville = new Ville(medecinToSearch.getVille());
-        if(!(medecinToSearch.getNom()==null)){
-            List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialitesAndNom(ville, medspecialite
-                    ,medecinToSearch.getNom());
-            if (medecins.isEmpty()) {
-                throw new GereMedecinNotFound("Nous n'avons pas trouver un medecin avec le profil demandé");
-            }
-            List<Map<String, Object>> medecinstrouves = new ArrayList<>();
-            for (Medecin medecin : medecins) {
-                Map<String, Object> medecin_json = new HashMap<>();
-                medecin_json.put("nom", medecin.getNom());
-                medecin_json.put("prenom", medecin.getPrenom());
-                medecin_json.put("ville",medecin.getVille());
-                medecin_json.put("sexe",medecin.getSexe());
-                medecin_json.put("address_cabinet",medecin.getAdressCabinet());
-                medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
-                medecin_json.put("id",medecin.getMedecinId())  ;
-                medecinstrouves.add(medecin_json);
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
-        }
-
-        List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialites(ville, medspecialite);
-
-        if (medecins.isEmpty()) {
-            throw new GereMedecinNotFound("Nous n'avons pas trouver un medecin avec le profil demandé");
-        }
-        List<Map<String, Object>> medecinstrouves = new ArrayList<>();
-        for (Medecin medecin : medecins) {
-            Map<String, Object> medecin_json = new HashMap<>();
-            medecin_json.put("nom", medecin.getNom());
-            medecin_json.put("prenom", medecin.getPrenom());
-            medecin_json.put("ville",medecin.getVille());
-            medecin_json.put("sexe",medecin.getSexe());
-            medecin_json.put("address_cabinet",medecin.getAdressCabinet());
-            medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
-            medecin_json.put("id",medecin.getMedecinId())  ;
-            medecinstrouves.add(medecin_json);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
-
-
-    }
 
     @Override
-    public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException {
-           Medecin medecin= authentificationService.toMedecin(sessionid);
-           List<RendezVous> mesdemandes=rendezVousRepository.findAllByMedecinAndStatusRdv(medecin,Etatrdv.Attente);
-           List<Map<String, Object>> medemandestrouves= new ArrayList<>();
-           for (RendezVous demande : mesdemandes) {
-            Map<String, Object> Rendezvous_json = new HashMap<>();
-              Rendezvous_json.put("rdvId",demande.getRdvId());
-              Rendezvous_json.put("patient",demande.getPatient());
-              Rendezvous_json.put("dateRdv",demande.getDateRdv());
-              Rendezvous_json.put("heureRdv",demande.getHeureRdv());
-             medemandestrouves.add(Rendezvous_json);
+    public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+        if(medecinServices.verifyAuthentification(sessionid)){
+            throw  new HandleIncorrectAuthentification("authentification incorrect");
+        }
+        Medecin medecin= authentificationService.toMedecin(sessionid);
+        List<RendezVous> tousmesrdv=medecin.getMesrendezvous();
+        List<Map<String, Object>> medemandestrouves= new ArrayList<>();
+        for (RendezVous demande : tousmesrdv) {
+                Map<String, Object> Rendezvous_json = new HashMap<>();
+                Rendezvous_json.put("rdvId",demande.getRdvId());
+                Rendezvous_json.put("statusRdv",demande.getStatusRdv());
+                Patient patient =demande.getPatient();
+                Rendezvous_json.put("nom",patient.getNom());
+                Rendezvous_json.put("prenom",patient.getPrenom());
+                Rendezvous_json.put("telephone",patient.getTelephone());
+                Rendezvous_json.put("email",patient.getPatientLogin());
+                Rendezvous_json.put("dateRdv",demande.getDateRdv());
+                Rendezvous_json.put("heureRdv",demande.getHeureRdv());
+                medemandestrouves.add(Rendezvous_json);
+
         }
         return ResponseEntity.status(HttpStatus.OK).body(medemandestrouves);
     }

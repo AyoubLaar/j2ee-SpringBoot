@@ -68,7 +68,8 @@ public class Medecin {
 
 
     @OneToMany(
-              mappedBy = "medecin"
+            mappedBy = "medecin",
+            fetch = FetchType.EAGER
     )
     private List<RendezVous> mesrendezvous;
 
@@ -91,18 +92,19 @@ public class Medecin {
     private Ville ville;
 
     @Column(columnDefinition = "TEXT",
-             nullable = false
+            nullable = false
     )
     private String adressCabinet;
 
     @Enumerated(EnumType.STRING)
-    private EtatDemandeMedecin statusDemande;
+    private StatusMedecin statusDemande;
 
     @Enumerated(EnumType.STRING)
     private Sexe sexe;
 
     private String sessionId;
 
+    @Enumerated(EnumType.STRING)
     private Autorisation autorisation;
 
 }

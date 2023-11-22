@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedecinToDelete {
-
+public class AcceptOrReject {
     private Long id;
-    private String nom;
-    private String prenom;
-    private String ville;
-
+    private String statusMedecin;
 }

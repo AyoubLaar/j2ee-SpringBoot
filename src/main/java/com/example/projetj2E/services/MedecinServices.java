@@ -16,12 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MedecinServices {
-    Medecin registerMedecin(MedecinModel medecinModel) throws GereExistEmailException;
-
-
+    ResponseEntity<String> registerMedecin(MedecinModel medecinModel) throws GereExistEmailException;
+    boolean verifyAuthentification(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
     ResponseEntity<String> authentifierUser(User medecin) throws HandleIncorrectAuthentification, UserNotFoundException;
 
-    ResponseEntity<Object> rechercherMedecin(MedecinToSearch medecinToSearch) throws GereMedecinNotFound;
-
-    ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException;
+    ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
 }

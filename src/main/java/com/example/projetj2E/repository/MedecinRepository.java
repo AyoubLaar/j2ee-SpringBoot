@@ -2,6 +2,7 @@ package com.example.projetj2E.repository;
 
 import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.entites.Specialite;
+import com.example.projetj2E.entites.StatusMedecin;
 import com.example.projetj2E.entites.Ville;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,5 @@ public interface MedecinRepository extends JpaRepository<Medecin,Long> {
 
       List<Medecin> findAllByPrenomAndNomAndVille(String prenom,String nom,Ville ville);
 
+      List<Medecin> findAllByStatusDemande(StatusMedecin statusMedecin);
 }

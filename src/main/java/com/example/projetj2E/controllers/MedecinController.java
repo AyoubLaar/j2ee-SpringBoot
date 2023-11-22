@@ -9,6 +9,7 @@ import com.example.projetj2E.models.MedecinModel;
 import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.services.MedecinServices;
+import com.example.projetj2E.services.MedecinServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class MedecinController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> registerMedecin(@RequestBody MedecinModel medecinModel) throws GereExistEmailException {
-        Medecin medecin = medecinServices.registerMedecin(medecinModel);
-        return ResponseEntity.status(HttpStatus.OK).body("Succes");
+        return  medecinServices.registerMedecin(medecinModel);
+
     }
 
     @PostMapping("/signin")
@@ -36,17 +37,11 @@ public class MedecinController {
         return medecinServices.authentifierUser(medecin);
 
     }
-    @PostMapping("/dashboard/mesdemandes")
-    public ResponseEntity<Object>  mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException {
-              return medecinServices.mesDemandeDeRdv(sessionid);
+    @GetMapping ("/dashboard/mesdemandes")
+    public ResponseEntity<Object>  mesDemandeDeRdv(@RequestHeader(value = "token") String sessionid)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
+        return medecinServices.mesDemandeDeRdv(sessionid);
     }
 
 
- /*  @PostMapping("/mesdemandes/rdv")
-   @CrossOrigin
-    public ResponseEntity<String>  accepter(@RequestHeader("token") String sessionid,@RequestBody RdvModel rdvModel){
-
-    }
-
-*/
 }
