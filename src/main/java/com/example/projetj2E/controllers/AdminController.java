@@ -31,14 +31,14 @@ public class AdminController {
 
     }
 
-    @PostMapping("dashboard/recherche")
-    public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid,@RequestBody MedecinToDelete medecinToDelete) throws UserNotFoundException, HandleIncorrectAuthentification {
-        return adminService.chercherMedecin(sessionid,medecinToDelete);
+    @PostMapping("dashboard/recherche/medecin")
+    public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid,@RequestBody MedecinToDelete medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
+        return adminService.chercherMedecin(sessionid,medecin);
     }
 
-    @PutMapping("/dashboard/recherche")
-    public ResponseEntity<String> supprimerMedecin(@RequestHeader("token") String sessionid, @RequestBody MedecinToDelete medecinToDelete) throws UserNotFoundException, HandleIncorrectAuthentification {
-        return adminService.supprimerMedecin(sessionid,medecinToDelete);
+    @PutMapping("/dashboard/recherche/medecin")
+    public ResponseEntity<String> supprimerMedecin(@RequestHeader("token") String sessionid, @RequestBody MedecinToDelete medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
+        return adminService.supprimerMedecin(sessionid,medecin);
     }
 
 
@@ -51,4 +51,6 @@ public class AdminController {
     public List<Map<String,Object>> medecinDemand(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
           return adminService.medecinDemand(sessionid);
     }
+
+
 }

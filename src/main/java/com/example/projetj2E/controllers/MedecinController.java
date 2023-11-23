@@ -34,7 +34,7 @@ public class MedecinController {
         return medecinServices.authentifierUser(medecin);
 
     }
-    @GetMapping ("/dashboard/mesdemandes")
+    @GetMapping ("/dashboard/mesRdv")
     public ResponseEntity<Object>  mesDemandeDeRdv(@RequestHeader(value = "token") String sessionid)
             throws UserNotFoundException, HandleIncorrectAuthentification {
         return medecinServices.mesDemandeDeRdv(sessionid);

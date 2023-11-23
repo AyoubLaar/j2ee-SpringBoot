@@ -43,7 +43,12 @@ public class PatientController {
 
         }
 
-        @PutMapping ("dashboard/recherche")
+        @GetMapping("dashboard/recherche")
+        public ResponseEntity<Object> disponibilites(@RequestHeader("token") String sessionid,@RequestBody MedecinToSearch medecin ){
+                     return  patientServices.disponibilites(sessionid,medecin);
+        }
+
+        @PutMapping("dashboard/recherche")
         @CrossOrigin
         public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
                 return   patientServices.choisirUnRdv(sessionid,rdvModel);

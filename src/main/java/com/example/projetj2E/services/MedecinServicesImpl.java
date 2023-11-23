@@ -51,15 +51,16 @@ public class MedecinServicesImpl implements MedecinServices {
         medecin.setDateDeNaissance(medecinModel.getDateDeNaissance());
         medecin.setStatusDemande(StatusMedecin.Attente);
         if ((medecinRepository.findByMedLogin(medecinModel.getMedLogin()).isPresent())) {
-            throw new GereExistEmailException("il y a déja un utilisateur avec cet email");
+            throw new GereExistEmailException("email exist déja");
         }
+        String sessionId=authentificationService.creerSessionIdPourMedecin(medecin.getMedLogin());
         medecin.setMedLogin(medecinModel.getMedLogin());
         medecin.setAutorisation(Autorisation.NonAutoriser);
         List<Specialite> specialites = specialiteService.returnSpecialites(medecinModel.getSpecialites());
         specialiteRepository.saveAll(specialites);// a éliminer seulement pour tester
         medecin.setSpecialites(specialites);
         medecinRepository.save(medecin);
-        return ResponseEntity.status(HttpStatus.OK).body("Succes");
+        return ResponseEntity.status(HttpStatus.OK).body(sessionId);
 
     }
 
@@ -92,7 +93,7 @@ public class MedecinServicesImpl implements MedecinServices {
 
     @Override
     public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
-        if (verifierAuthentification.verifyAuthentificationPatient(sessionid)){
+        if (!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
              throw new HandleIncorrectAuthentification("Non authentifié");
         }
         Medecin medecin= authentificationService.toMedecin(sessionid);

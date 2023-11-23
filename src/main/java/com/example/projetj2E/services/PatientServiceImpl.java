@@ -12,7 +12,6 @@ import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.MedecinRepository;
 import com.example.projetj2E.repository.PatientRepository;
 import com.example.projetj2E.repository.RendezVousRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -53,8 +52,15 @@ public class PatientServiceImpl implements PatientServices{
         patient.setTelephone(patientModel.getTelephone());
         patient.setPatientLogin(patientModel.getPatientLogin());
         patient.setAutorisation(Autorisation.Autoriser);
-        patientRepository.save(patient);
-        return ResponseEntity.ok("saved");
+        String sessionId=authentificationService.creerSessionIdPourPatient(patient.getPatientLogin());
+        patient.setSessionId(sessionId);
+        try{
+            patientRepository.save(patient);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body("ERROR");
+        }
+        return ResponseEntity.ok(sessionId);
     }
 
     @Override
@@ -83,7 +89,7 @@ public class PatientServiceImpl implements PatientServices{
     @Override
      public ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification {
         // authentifier patient
-        if(verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
+        if(!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Specialite medspecialite = Specialite.builder()
@@ -133,8 +139,13 @@ public class PatientServiceImpl implements PatientServices{
     }
 
     @Override
+    public ResponseEntity<Object> disponibilites(String sessionid, MedecinToSearch medecin) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
-        if(verifierAuthentification.verifyAuthentificationAdmin(sessionId)){
+        if(!verifierAuthentification.verifyAuthentificationPatient(sessionId)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Optional<Medecin> medecin=medecinRepository.findById(rdvModel.getMedecinId());
@@ -145,7 +156,8 @@ public class PatientServiceImpl implements PatientServices{
         RendezVous rendezVous=new RendezVous();
         rendezVous.setHeureRdv(LocalTime.of(Integer.parseInt(rdvModel.getHeureRdv()),0));
         rendezVous.setDateRdv(rdvModel.getDateRdv());
-        rendezVous.setStatusRdv(Etatrdv.Attente);
+        rendezVous.setStatusDemandeRdv(StatusDemandeRdv.Attente);
+        rendezVous.setStatusRdv(StatusRdv.Attente);
         rendezVousRepository.save(rendezVous);
         rendezVous.setMedecin(medecin.get());
         rendezVous.setPatient(patient);

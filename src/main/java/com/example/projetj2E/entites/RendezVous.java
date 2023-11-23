@@ -41,10 +41,11 @@ public class RendezVous {
             referencedColumnName = " patientId"
     )
     private Patient patient;
-
     @Enumerated(EnumType.STRING)
+    private StatusDemandeRdv statusDemandeRdv;
+    @Enumerated(EnumType.STRING)
+    private StatusRdv statusRdv;
 
-    private Etatrdv statusRdv;
 
 
 }

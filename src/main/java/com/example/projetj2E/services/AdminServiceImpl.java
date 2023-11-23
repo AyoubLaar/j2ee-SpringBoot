@@ -11,6 +11,7 @@ import com.example.projetj2E.repository.AdminRepository;
 import com.example.projetj2E.repository.MedecinRepository;
 
 
+import com.example.projetj2E.repository.RendezVousRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,38 +20,41 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.*;
 
+import static com.example.projetj2E.entites.Autorisation.NonAutoriser;
+
 
 @Service
 public class AdminServiceImpl implements AdminService{
 
-    private final AdminRepository adminRepository;
     @Autowired
-    private VerifierAuthentificationImpl verifierAuthentification;
+    private RendezVousRepository rendezVousRepository;
+    private final AdminRepository adminRepository;
+    private final VerifierAuthentificationImpl verifierAuthentification;
     private final MedecinRepository medecinRepository;
 
     private final SpecialiteService specialiteService;
 
     private final AuthentificationService authentificationService;
 
-    public AdminServiceImpl(AdminRepository adminRepository, MedecinRepository medecinRepository, SpecialiteService specialiteService, AuthentificationService authentificationService) {
+    public AdminServiceImpl(AdminRepository adminRepository, MedecinRepository medecinRepository, SpecialiteService specialiteService, AuthentificationService authentificationService, VerifierAuthentificationImpl verifierAuthentification) {
         this.adminRepository = adminRepository;
         this.medecinRepository = medecinRepository;
         this.specialiteService = specialiteService;
         this.authentificationService = authentificationService;
 
+        this.verifierAuthentification = verifierAuthentification;
     }
 
     @Override
     public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, MedecinToDelete medecinToDelete) throws UserNotFoundException, HandleIncorrectAuthentification {
         //on authentifie d'abord l'admin
-        if(verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
+        if(!verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
         //puis on commence la recherche ville nom et prenom
-        Ville ville = new Ville(medecinToDelete.getVille());
         String nom= medecinToDelete.getNom();
         String prenom=medecinToDelete.getPrenom();
-        List<Medecin> medecins = medecinRepository.findAllByPrenomAndNomAndVille(prenom,nom,ville);
+        List<Medecin> medecins = medecinRepository.findAllByPrenomAndNom(prenom,nom);
         if (medecins.isEmpty()) {
             throw new UserNotFoundException("medecin non trouvé");
         }
@@ -72,7 +76,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public ResponseEntity<String> supprimerMedecin(String sessionid, MedecinToDelete medecinToDelete) throws UserNotFoundException, HandleIncorrectAuthentification {
         //on authenfie d'abord l'admin
-        if(verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
+        if(!verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
         Optional<Medecin> optionalmedecin=medecinRepository.findById(medecinToDelete.getId());
@@ -80,6 +84,15 @@ public class AdminServiceImpl implements AdminService{
             throw new UserNotFoundException("medecin n'existe pas");
         }
         Medecin medecin=optionalmedecin.get();
+        List<RendezVous> rendezVous=medecin.getMesrendezvous();
+        List<RendezVous> rendouZVousSupprimer=new ArrayList<>();
+        for( RendezVous rdv : rendezVous){
+            if(rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepeter)){
+                rdv.setStatusDemandeRdv(StatusDemandeRdv.Supprimer);
+                rendouZVousSupprimer.add(rdv);
+            }
+        }
+        medecin.setMesrendezvous(rendouZVousSupprimer);
         medecin.setAutorisation(Autorisation.NonAutoriser);
         medecinRepository.save(medecin);
         return ResponseEntity.status(HttpStatus.OK).body("deleted");
@@ -98,7 +111,7 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public ResponseEntity<String> accepterOrRejectMedecin(String sessionid, AcceptOrReject medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
         //on authentifie d'abord l'admin
-        if(verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
+        if(!verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
         Optional<Medecin> optionalmedecin=medecinRepository.findById(medecin.getId());
@@ -120,7 +133,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public List<Map<String,Object>> medecinDemand(String sessionid) throws HandleIncorrectAuthentification, UserNotFoundException {
-        if(verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
+        if(!verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
         List<Medecin> medecins =medecinRepository.findAllByStatusDemande(StatusMedecin.Attente);
@@ -150,7 +163,7 @@ public class AdminServiceImpl implements AdminService{
             {
                 throw new HandleIncorrectAuthentification("données invalide!");
             }
-            String sessionId = authentificationService.creerSessionIdPourPatient(admin.getLogin());
+            String sessionId = authentificationService.creerSessionIdPourAdmin(admin.getLogin());
             admin.setSessionId(sessionId);
             try {
                 adminRepository.save(admin);

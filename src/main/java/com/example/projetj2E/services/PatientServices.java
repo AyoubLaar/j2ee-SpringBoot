@@ -20,4 +20,5 @@ public interface PatientServices {
 
     ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification;
 
+    ResponseEntity<Object> disponibilites(String sessionid, MedecinToSearch medecin);
 }

@@ -20,4 +20,6 @@ public interface MedecinRepository extends JpaRepository<Medecin,Long> {
       List<Medecin> findAllByPrenomAndNomAndVille(String prenom,String nom,Ville ville);
 
       List<Medecin> findAllByStatusDemande(StatusMedecin statusMedecin);
+
+      List<Medecin> findAllByPrenomAndNom(String prenom, String nom);
 }

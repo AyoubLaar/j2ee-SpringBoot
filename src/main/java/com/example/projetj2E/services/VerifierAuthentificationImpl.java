@@ -21,8 +21,9 @@ public class VerifierAuthentificationImpl implements VerifierAuthentification {
 
     @Autowired
     private AuthentificationServiceImple authentificationService;
-
+   @Autowired
    private AdminRepository adminRepository;
+   @Autowired
    private PatientRepository patientRepository;
     @Override
     public boolean verifyAuthentificationPatient(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
