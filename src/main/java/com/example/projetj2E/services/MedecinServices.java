@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public interface MedecinServices {
     ResponseEntity<String> registerMedecin(MedecinModel medecinModel) throws GereExistEmailException;
-    boolean verifyAuthentification(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
+
     ResponseEntity<String> authentifierUser(User medecin) throws HandleIncorrectAuthentification, UserNotFoundException;
 
     ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;

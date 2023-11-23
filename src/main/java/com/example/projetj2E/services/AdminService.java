@@ -14,8 +14,6 @@ import java.util.Map;
 public interface AdminService {
     ResponseEntity<String> authentifierUser(User user) throws HandleIncorrectAuthentification, UserNotFoundException;
 
-    boolean verifyAuthentification(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
-
     ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, MedecinToDelete medecinToDelete) throws UserNotFoundException, HandleIncorrectAuthentification;
 
     ResponseEntity<String> supprimerMedecin(String sessionid, MedecinToDelete medecinToDelete) throws UserNotFoundException, HandleIncorrectAuthentification;

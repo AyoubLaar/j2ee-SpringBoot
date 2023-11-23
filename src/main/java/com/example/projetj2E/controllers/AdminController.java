@@ -1,10 +1,9 @@
 package com.example.projetj2E.controllers;
-
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.*;
-import com.example.projetj2E.services.AdminServiceImpl;
+import com.example.projetj2E.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import java.util.Map;
 @CrossOrigin
 public class AdminController {
     @Autowired
-    private AdminServiceImpl adminService;
+    private AdminService adminService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> saveAdmin(@RequestBody User user) throws GereExistEmailException {

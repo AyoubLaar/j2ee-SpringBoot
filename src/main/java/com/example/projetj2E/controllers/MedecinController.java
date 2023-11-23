@@ -1,17 +1,14 @@
 package com.example.projetj2E.controllers;
 
 
-import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.MedecinModel;
-import com.example.projetj2E.models.RdvModel;
+
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.services.MedecinServices;
-import com.example.projetj2E.services.MedecinServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

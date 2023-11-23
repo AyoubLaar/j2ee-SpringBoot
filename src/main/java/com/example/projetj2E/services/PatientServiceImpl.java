@@ -25,18 +25,18 @@ public class PatientServiceImpl implements PatientServices{
     private final PatientRepository patientRepository;
     private final AuthentificationService authentificationService;
     private final RendezVousRepository rendezVousRepository;
-    private final PatientServices patientServices;
+    private final VerifierAuthentificationImpl verifierAuthentification;
     private final SpecialiteService specialiteService;
 
     private final MedecinRepository medecinRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository, AuthentificationService authentificationService, RendezVousRepository rendezVousRepository, PatientServices patientServices, SpecialiteService specialiteService, MedecinRepository medecinRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, AuthentificationService authentificationService, RendezVousRepository rendezVousRepository, SpecialiteService specialiteService, MedecinRepository medecinRepository, VerifierAuthentificationImpl verifierAuthentification) {
         this.patientRepository = patientRepository;
         this.authentificationService = authentificationService;
         this.rendezVousRepository = rendezVousRepository;
-        this.patientServices = patientServices;
         this.specialiteService = specialiteService;
         this.medecinRepository = medecinRepository;
+        this.verifierAuthentification = verifierAuthentification;
     }
 
     @Override
@@ -83,8 +83,8 @@ public class PatientServiceImpl implements PatientServices{
     @Override
      public ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification {
         // authentifier patient
-        if(patientServices.verifyAuthentification(sessionid)){
-            throw  new HandleIncorrectAuthentification("authentification incorrect");
+        if(verifierAuthentification.verifyAuthentificationAdmin(sessionid)){
+            throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Specialite medspecialite = Specialite.builder()
                 .nomDuSpecialite(medecinToSearch.getSpecialite())
@@ -134,9 +134,8 @@ public class PatientServiceImpl implements PatientServices{
 
     @Override
     public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
-        // doit d'abord s'authentifier
-        if(patientServices.verifyAuthentification(sessionId)){
-            throw  new HandleIncorrectAuthentification("authentification incorrect");
+        if(verifierAuthentification.verifyAuthentificationAdmin(sessionId)){
+            throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Optional<Medecin> medecin=medecinRepository.findById(rdvModel.getMedecinId());
         if(medecin.isEmpty()){
@@ -154,16 +153,7 @@ public class PatientServiceImpl implements PatientServices{
         return ResponseEntity.status(200).body("saved");
     }
 
-    @Override
-    public boolean verifyAuthentification(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
-        Patient patient= authentificationService.toPatient(sessionid);
-        User user= User.builder()
-                .login(patient.getPatientLogin())
-                .password(patient.getPassword())
-                .build();
-        ResponseEntity<String> reponse  =patientServices.authentifierUser(user);
-        return !Objects.equals(reponse.getBody(), sessionid);
-    }
+
 
 }
 

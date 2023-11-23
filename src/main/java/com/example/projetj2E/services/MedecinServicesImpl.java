@@ -7,7 +7,6 @@ import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.MedecinModel;
-import com.example.projetj2E.models.MedecinToSearch;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.MedecinRepository;
 
@@ -26,17 +25,17 @@ public class MedecinServicesImpl implements MedecinServices {
 
     private final SpecialiteService specialiteService;
 
-    private MedecinServices medecinServices;
-
     @Autowired
-    private AuthentificationService authentificationService;
+    private  VerifierAuthentificationImpl verifierAuthentification;
+    private final AuthentificationService authentificationService;
 
     private final SpecialiteRepository specialiteRepository;
 
-    public MedecinServicesImpl(MedecinRepository medecinRepository, SpecialiteService specialiteService, SpecialiteRepository specialiteRepository) {
+    public MedecinServicesImpl(MedecinRepository medecinRepository, SpecialiteService specialiteService, SpecialiteRepository specialiteRepository, AuthentificationService authentificationService) {
         this.medecinRepository = medecinRepository;
         this.specialiteService = specialiteService;
         this.specialiteRepository = specialiteRepository;
+        this.authentificationService = authentificationService;
     }
 
     @Override
@@ -64,16 +63,7 @@ public class MedecinServicesImpl implements MedecinServices {
 
     }
 
-    @Override
-    public boolean verifyAuthentification(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
-        Medecin medecin= authentificationService.toMedecin(sessionid);
-        User user= User.builder()
-                .login(medecin.getMedLogin())
-                .password(medecin.getPassword())
-                .build();
-        ResponseEntity<String> reponse  =medecinServices.authentifierUser(user);
-        return !Objects.equals(reponse.getBody(), sessionid);
-    }
+
 
     @Override
     public ResponseEntity<String> authentifierUser(User medecin) throws HandleIncorrectAuthentification, UserNotFoundException {
@@ -102,8 +92,8 @@ public class MedecinServicesImpl implements MedecinServices {
 
     @Override
     public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
-        if(medecinServices.verifyAuthentification(sessionid)){
-            throw  new HandleIncorrectAuthentification("authentification incorrect");
+        if (verifierAuthentification.verifyAuthentificationPatient(sessionid)){
+             throw new HandleIncorrectAuthentification("Non authentifié");
         }
         Medecin medecin= authentificationService.toMedecin(sessionid);
         List<RendezVous> tousmesrdv=medecin.getMesrendezvous();

@@ -38,14 +38,14 @@ public class PatientController {
 
         @PostMapping("dashboard/recherche")
         @CrossOrigin
-        public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, @RequestBody MedecinToSearch medecinToSearch) throws  UserNotFoundException {
+        public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, @RequestBody MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification {
                 return   patientServices.chercherMedecin(sessionid,medecinToSearch);
 
         }
 
         @PutMapping ("dashboard/recherche")
         @CrossOrigin
-        public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws  UserNotFoundException {
+        public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
                 return   patientServices.choisirUnRdv(sessionid,rdvModel);
 
         }

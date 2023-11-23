@@ -14,7 +14,6 @@ import java.util.Optional;
 @Repository
 public interface MedecinRepository extends JpaRepository<Medecin,Long> {
       Optional<Medecin>  findByMedLogin(String email);
-
       List<Medecin> findAllByVilleAndSpecialites(Ville ville, Specialite specialites);
       List<Medecin> findAllByVilleAndSpecialitesAndNom(Ville ville, Specialite specialites,String nom);
 
