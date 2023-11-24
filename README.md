@@ -6,27 +6,32 @@
 
                         
 
-        *Réalisé par:*                                  *Encadré par:*
-        A
+        *Réalisé par:*                                 *Encadré par:*
+        Mariame Cissé
         W
         N
         M
         
-SOMMAIRE:
+*SOMMAIRE:*
+
 I. Introduction;
+
 II. Conception:
 1. Phase Analyse
 1-1.Présentation des acteurs et actions 
 2. Language de Modélisation Unifié (UML);
 2.1. Diagramme de Cas d'Utilisation
 2-2 Diagramme de Classe
+   
 III. Réalisation:
-1. Langages et Environnement de Développement
-1-1. Langages Utilisés
-1-2. Framework Utilisés
-1-3. Outils Utilisés 
 
-Tables Des Figures:
+3. Langages et Environnement de Développement
+3-1. Langages Utilisés
+3-2. Framework Utilisé
+3-3. Bibliothèque Utilisé
+3-4. Outils Utilisés 
+
+*Tables Des Figures:*
 1. Diagramme de Cas d'Utilisation
 2. Diagramme de Classe
 3. Interface Medecin Repository
@@ -39,9 +44,84 @@ Tables Des Figures:
 10. Interface Rendez-vous Services
 11. Interface Specialité Services
 
-Table Des Tableaux:
+*Table Des Tableaux:*
 1. Table User
 2. Table Medecin
 3. Table Patient
 4. Table Rendez-vous
 5. Table Specialité
+
+I. Introduction:
+
+Enterprise Edition (J2EE) est une plateforme qui fournit une architecture pour le développement, la construction et le déploiement d’applications Web robustes, sécurisées et évolutives de notre site. En effet, l'utilisation de J2EE dans ce projet permet de faciliter la tâche pour développer la plateforme web de téléconsultation médicale qui à pour objectif de simplifier au patient et au médecin le gain de temps et de distance. 
+
+II. Conception: 
+
+1. Phase d'analyse:
+La phase de l'analyse vise à définir et à justifier la solution optimale qui répondra aux exigences du projet et aux besoins identifiés ainsi que les acteurs du système et les tâches associées à chacun.
+
+1-1.Présentation des acteurs et actions:
+
+  ❖Visiteur : 
+C’est un individu qui est entrain de fouiller sur le net, cherchant un médecin pour une consultation ou pour avoir une idée sur les prix. Jusqu’à ce stade c’est un utilisateur inconnu donc il n’est pas encore un patient ou un médecin.
+
+  ❖ Le Médecin : 
+C’est un visiteur ayant déjà créer un compte sur notre site en tant que médecin, il peut donc suivre le processus de la téléconsultation en toute sécurité sachant que notre système doit être l’unique responsable de la confidentialité des données personnelles et des dossiers médicaux de ses patients.
+
+  ❖ Le Patient : 
+C’est un visiteur ayant déjà créer un compte sur notre site en tant que patient, il peut donc suivre le processus de la téléconsultation en toute sécurité sachant que notre système doit être l’unique responsable de la confidentialité des données personnelles et de son dossier médical.
+
+  ❖ L’administrateur : 
+Pour les sites web on l’appelle généralement « le webmaster ». C’est celui qui assure le dynamisme du site et veille sur les mises à jour des médecins.
+
+2. Language de Modélisation Unifié (UML);
+2.1. Diagramme de Cas d'Utilisation
+
+   .......
+   
+2-2 Diagramme de Classe
+
+.......
+
+
+III. Réalisation:
+
+3. Langages et Environnement de Développement:
+
+   *3.1: Langages utilisés:*
+
+Nous avons utilisés quatres (4) langages essentiels que nous citons ci-dessous:
+
+- Langage JAVASCRIPIT: est un langage de programmation orientée objet de scripts employé dans les pages web interactives afin d’effectuer des contrôles sur les formulaires avant leur validation 
+mais aussi il permet l’interaction des objets des pages web.
+
+- Langage Java: Java est utilisé dans une variété de domaines, tels que le développement d'applications Web, d'applications mobiles (avec Android), d'applications d'entreprise, de logiciels embarqués, et plus encore.
+
+- Langage HTML signifie Hyper Text Markup Language :
+  - Hyper Text : est un élément textuel (ou pas) au sein d'une page web qui point vers une autre page web. Dans l'acronyme HTML, le H de HyperText correspond à la fonction de création de ces liens.
+  - Markup : instruction de styles détaillés insérées dans un document texte destiné à être publié sur le World Wide Web.
+- Langage CSS est un sigle qui désigne « Cascading Style Sheets » qui veut dire feuilles de styles en cascade, servent à mettre en forme des documents web, type page HTML ou XML.
+  
+  *3.2: Framework utilisé:*
+
+Nous avons utilisé (1) Framework pour la réalisation de ce projet qui est:
+  - Framework Springboot:
+Spring Boot est un framework Java qui facilite le développement d'applications Java basées sur Spring.
+
+   *3.3: Bibliothèque utilisé*
+   Nous avons utilisé une (1) bibliothèque pour la réalisation de ce projet qui est: 
+  - Bibliothèque Reacti.js:
+
+React.js, souvent appelé simplement React, est une bibliothèque JavaScript open-source pour créer des interfaces utilisateur. Il a été développé par Meta (anciennement Facebook) et permet aux développeurs d’accéder à des composants de code pour créer des interfaces utilisateur interactives et flexibles23.
+
+  *3.4: Les Outils utilisés:*
+
+Nous avons utilisés deux (2) outils essentiels que nous citons ci-dessous:
+  - Postman:
+Postman est une plateforme de développement d’API qui permet aux développeurs de créer, tester, documenter et partager des Interfaces de programmation d'application (API) de manière efficace.
+  - Le Github:
+Le GitHub est une plateforme de développement qui facilite la collaboration, la productivité et la sécurité pour les développeurs de tous niveaux et projets.
+  
+
+ 
+
