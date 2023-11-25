@@ -75,16 +75,14 @@ public class RdvServiceImpl implements RdvService {
         List<RendezVous> rdvDuMedecin = medecin.getMesrendezvous();
         Map<LocalDate,List<Long>> unavailableRdv = new HashMap<>();
         for (RendezVous rdv : rdvDuMedecin) {
-            if (rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter)) {
-                LocalDate date = rdv.getDateRdv();
-                Long heure = (long) rdv.getHeureRdv().getHour();
-                if(unavailableRdv.containsKey(date)){
-                    unavailableRdv.get(date).add(heure);
-                }else{
-                    List<Long> liste_heures = new ArrayList<>();
-                    liste_heures.add(heure);
-                    unavailableRdv.put(date,liste_heures);
-                }
+            LocalDate date = rdv.getDateRdv();
+            Long heure = (long) rdv.getHeureRdv().getHour();
+            if(unavailableRdv.containsKey(date)){
+                unavailableRdv.get(date).add(heure);
+            }else{
+                List<Long> liste_heures = new ArrayList<>();
+                liste_heures.add(heure);
+                unavailableRdv.put(date,liste_heures);
             }
         }
         return unavailableRdv;
