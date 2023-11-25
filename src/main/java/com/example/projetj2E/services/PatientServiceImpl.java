@@ -188,11 +188,11 @@ public class PatientServiceImpl implements PatientServices{
     }
 
     @Override
-    public  ResponseEntity<Object> disponibilites(String sessionid, MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public  ResponseEntity<Object> disponibilites(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
         if(!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
-        Optional<Medecin> optionalMedecin=medecinRepository.findById(medecinId.getId());
+        Optional<Medecin> optionalMedecin=medecinRepository.findById(medecinId);
         if(optionalMedecin.isPresent()){
             List<LocalTime> heuresindispo=rdvService.findUnavailabilityForMedecin(optionalMedecin.get());
             Map<String ,Object> indispo_json=new HashMap<>();

@@ -65,7 +65,7 @@ public class VisitorServiceImpl implements VisitorService{
             Map<String, Object> medecin_json = new HashMap<>();
             medecin_json.put("nom", medecin.getNom());
             medecin_json.put("prenom", medecin.getPrenom());
-            medecin_json.put("ville",medecin.getVille());
+            medecin_json.put("ville",medecin.getVille().getNomVille());
             medecin_json.put("sexe",medecin.getSexe());
             medecin_json.put("address_cabinet",medecin.getAdressCabinet());
             medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));

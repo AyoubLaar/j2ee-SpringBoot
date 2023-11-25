@@ -41,7 +41,8 @@ public class PatientController {
         }
 
         @GetMapping("dashboard/recherche")
-        public ResponseEntity<Object> disponibilites(@RequestHeader("token") String sessionid,@RequestBody MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+        @CrossOrigin
+        public ResponseEntity<Object> disponibilites(@RequestHeader("token") String sessionid,@RequestParam Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
                      return  patientServices.disponibilites(sessionid,medecinId);
         }
 
