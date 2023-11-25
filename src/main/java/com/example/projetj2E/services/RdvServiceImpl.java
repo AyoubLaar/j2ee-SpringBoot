@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RdvServiceImpl implements RdvService {
@@ -69,12 +71,20 @@ public class RdvServiceImpl implements RdvService {
     }
 
     @Override
-    public List<LocalTime> findUnavailabilityForMedecin(Medecin medecin) {
+    public Map<LocalDate, List<Long>> findUnavailabilityForMedecin(Medecin medecin) {
         List<RendezVous> rdvDuMedecin = medecin.getMesrendezvous();
-        List<LocalTime> unavailableRdv = new ArrayList<>();
+        Map<LocalDate,List<Long>> unavailableRdv = new HashMap<>();
         for (RendezVous rdv : rdvDuMedecin) {
             if (rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter)) {
-                unavailableRdv.add(rdv.getHeureRdv());
+                LocalDate date = rdv.getDateRdv();
+                Long heure = (long) rdv.getHeureRdv().getHour();
+                if(unavailableRdv.containsKey(date)){
+                    unavailableRdv.get(date).add(heure);
+                }else{
+                    List<Long> liste_heures = new ArrayList<>();
+                    liste_heures.add(heure);
+                    unavailableRdv.put(date,liste_heures);
+                }
             }
         }
         return unavailableRdv;

@@ -2,11 +2,10 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.entites.RendezVous;
-import com.example.projetj2E.entites.StatusDemandeRdv;
-import com.example.projetj2E.entites.StatusRdv;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface RdvService {
 
@@ -22,5 +21,5 @@ public interface RdvService {
 
     void supprimerRdv(RendezVous rdv);
 
-    List<LocalTime> findUnavailabilityForMedecin(Medecin medecin);
+    Map<LocalDate, List<Long>> findUnavailabilityForMedecin(Medecin medecin);
 }
