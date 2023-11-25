@@ -29,4 +29,6 @@ public interface AdminService {
     ResponseEntity<Object> bloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException;
 
     List<LocalTime> RdvIndisponibles(RendezVous rdv);
+
+    ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException;
 }

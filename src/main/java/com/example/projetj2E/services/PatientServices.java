@@ -27,7 +27,8 @@ public interface PatientServices {
 
     List<Patient> trouverParPrenomEtNom(String prenom,String nom);
 
-    void bloquerPatient(Patient patient);
 
     ResponseEntity<Object> mesRdv(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
+
+    ResponseEntity<Object> mesDemandes(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
 }

@@ -76,5 +76,13 @@ public class AdminController {
           return adminService.medecinDemand(sessionid);
     }
 
+    @PutMapping("dashboard/patient/bloque")
+    @CrossOrigin
+    public ResponseEntity<Object> debloquerPatient(@RequestHeader("token") String sessionid,
+                                                 @RequestBody PatientId patientId )
+            throws UserNotFoundException, HandleIncorrectAuthentification {
+        return adminService.debloquerPatient(sessionid,patientId);
+    }
+
 
 }

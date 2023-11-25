@@ -58,6 +58,13 @@ public class PatientController {
                 return patientServices.mesRdv(sessionid);
         }
 
+        @GetMapping ("/dashboard/mesdemandes")
+        @CrossOrigin
+        public ResponseEntity<Object>  mesDemandes(@RequestHeader(value = "token") String sessionid)
+                throws UserNotFoundException, HandleIncorrectAuthentification {
+                return patientServices.mesDemandes(sessionid);
+        }
+
 
 
 }

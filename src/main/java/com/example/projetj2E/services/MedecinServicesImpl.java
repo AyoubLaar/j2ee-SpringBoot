@@ -109,6 +109,7 @@ public class MedecinServicesImpl implements MedecinServices {
             List<RendezVous> tousmesrdv = medecin.getMesrendezvous();
             List<Map<String, Object>> medemandes = new ArrayList<>();
             for (RendezVous demande : tousmesrdv) {
+                rdvService.mettreAjourEtatRdv(demande);
                 if (demande.getStatusRdv().equals(StatusRdv.Attente) &&
                         demande.getStatusDemandeRdv().equals(StatusDemandeRdv.Attente)
                 ) {
