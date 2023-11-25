@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -155,10 +156,7 @@ public class PatientServiceImpl implements PatientServices{
        return patientRepository.findAllByPrenomAndNom(prenom,nom);
     }
 
-    @Override
-    public void bloquerPatient(Patient patient) {
 
-    }
 
     @Override
     public ResponseEntity<Object> mesRdv(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
@@ -188,13 +186,42 @@ public class PatientServiceImpl implements PatientServices{
     }
 
     @Override
+    public ResponseEntity<Object> mesDemandes(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+        if (verifierAuthentification.verifyAuthentificationPatient(sessionid)) {
+            Patient patient = authentificationService.toPatient(sessionid);
+            List<RendezVous> tousmesrdv = patient.getMesrendezvous();
+            List<Map<String, Object>> medemandes = new ArrayList<>();
+            for (RendezVous demande : tousmesrdv) {
+                rdvService.mettreAjourEtatRdv(demande);
+                if (demande.getStatusRdv().equals(StatusRdv.Attente) &&
+                       !demande.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter)
+                ) {
+                    Map<String, Object> Rendezvous_json = new HashMap<>();
+                    Rendezvous_json.put("rdvId", demande.getRdvId());
+                    Medecin medecin = demande.getMedecin();
+                    Rendezvous_json.put("nom", medecin.getNom());
+                    Rendezvous_json.put("prenom", medecin.getPrenom());
+                    Rendezvous_json.put("email", medecin.getMedLogin());
+                    Rendezvous_json.put("dateRdv", demande.getDateRdv());
+                    Rendezvous_json.put("heureRdv", demande.getHeureRdv());
+                    Rendezvous_json.put("cabinet", medecin.getAdressCabinet());
+                    medemandes.add(Rendezvous_json);
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(medemandes);
+        } else {
+            throw new HandleIncorrectAuthentification("Non authentifié");
+        }
+    }
+
+    @Override
     public  ResponseEntity<Object> disponibilites(String sessionid, MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
         if(!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Optional<Medecin> optionalMedecin=medecinRepository.findById(medecinId.getId());
         if(optionalMedecin.isPresent()){
-            List<LocalTime> heuresindispo=rdvService.findUnavailabilityForMedecin(optionalMedecin.get());
+            Map<LocalDate,List<Long>> heuresindispo=rdvService.findUnavailabilityForMedecin(optionalMedecin.get());
             Map<String ,Object> indispo_json=new HashMap<>();
             indispo_json.put("indisponibles",heuresindispo);
             return  ResponseEntity.status(HttpStatus.OK).body(indispo_json);

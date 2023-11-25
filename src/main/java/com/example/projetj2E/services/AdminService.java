@@ -2,6 +2,7 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.RendezVous;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.RendezVousNotFound;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.*;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,5 @@ public interface AdminService {
 
     List<LocalTime> RdvIndisponibles(RendezVous rdv);
 
-    ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException;
+    ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound;
 }

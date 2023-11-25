@@ -2,6 +2,7 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.*;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.RendezVousNotFound;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.*;
@@ -230,7 +231,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
