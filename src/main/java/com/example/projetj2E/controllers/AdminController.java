@@ -19,36 +19,60 @@ public class AdminController {
     private AdminService adminService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> saveAdmin(@RequestBody User user) throws GereExistEmailException {
+    @CrossOrigin
+    public ResponseEntity<String> saveAdmin(@RequestBody User user)
+             {
         return  adminService.saveAdmin(user);
 
     }
-
     @PostMapping("/signin")
     @CrossOrigin
-    public ResponseEntity<String> authentifierUser(@RequestBody User admin) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<String> authentifierUser(@RequestBody User admin)
+            throws HandleIncorrectAuthentification, UserNotFoundException {
         return adminService.authentifierUser(admin);
 
     }
-
     @PostMapping("dashboard/recherche/medecin")
-    public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid,@RequestBody MedecinToDelete medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
+    @CrossOrigin
+    public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid,
+                                                  @RequestBody MedecinToSearch medecin)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         return adminService.chercherMedecin(sessionid,medecin);
+    }
+    @PostMapping("dashboard/recherche/patient")
+    @CrossOrigin
+    public ResponseEntity<Object> chercherPatient(@RequestHeader("token") String sessionid,
+                                                  @RequestBody PatientToSearch patient )
+            throws UserNotFoundException, HandleIncorrectAuthentification {
+        return adminService.chercherPatient(sessionid,patient);
+    }
+    @PutMapping("dashboard/recherche/patient")
+    @CrossOrigin
+    public ResponseEntity<Object> bloquerPatient(@RequestHeader("token") String sessionid,
+                                                   @RequestBody PatientId patientId )
+            throws UserNotFoundException, HandleIncorrectAuthentification {
+        return adminService.bloquerPatient(sessionid,patientId);
     }
 
     @PutMapping("/dashboard/recherche/medecin")
-    public ResponseEntity<String> supprimerMedecin(@RequestHeader("token") String sessionid, @RequestBody MedecinToDelete medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
-        return adminService.supprimerMedecin(sessionid,medecin);
+    @CrossOrigin
+    public ResponseEntity<String> bloquerMedecin(@RequestHeader("token") String sessionid,
+                                                   @RequestBody MedecinId medecinId)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
+        return adminService.bloquerMedecin(sessionid,medecinId);
     }
-
 
     @PutMapping("/dashboard/demands")
-    public ResponseEntity<String> accepterOrRejectMedecin(@RequestHeader("token") String sessionid, @RequestBody AcceptOrReject medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
+    @CrossOrigin
+    public ResponseEntity<String> accepterOrRejectMedecin(@RequestHeader("token") String sessionid,
+                                                          @RequestBody AcceptOrReject medecin)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         return adminService.accepterOrRejectMedecin(sessionid,medecin);
     }
-
     @GetMapping("/dashboard/demands")
-    public List<Map<String,Object>> medecinDemand(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+    @CrossOrigin
+    public List<Map<String,Object>> medecinDemand(@RequestHeader("token") String sessionid)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
           return adminService.medecinDemand(sessionid);
     }
 

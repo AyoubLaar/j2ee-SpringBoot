@@ -69,7 +69,8 @@ public class Patient {
     private Sexe sexe;
 
     @OneToMany(
-            mappedBy = "patient"
+            mappedBy = "patient",
+            fetch = FetchType.EAGER
     )
     private List<RendezVous> mesrendezvous;
 

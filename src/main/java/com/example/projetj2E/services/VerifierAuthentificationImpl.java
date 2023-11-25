@@ -7,6 +7,7 @@ import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.User;
 import com.example.projetj2E.repository.AdminRepository;
+import com.example.projetj2E.repository.MedecinRepository;
 import com.example.projetj2E.repository.PatientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class VerifierAuthentificationImpl implements VerifierAuthentification {
    private AdminRepository adminRepository;
    @Autowired
    private PatientRepository patientRepository;
+   @Autowired
+   private MedecinRepository medecinRepository;
     @Override
     public boolean verifyAuthentificationPatient(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
         Patient patientsession= authentificationService.toPatient(sessionid);
@@ -37,12 +40,12 @@ public class VerifierAuthentificationImpl implements VerifierAuthentification {
 
     @Override
     public boolean verifyAuthentificationMedecin(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
-        Medecin medecinsession = authentificationService.toMedecin(sessionid);
-        Optional<Patient> patientdb=patientRepository.findBypatientLogin(medecinsession.getMedLogin());
-        if(patientdb.isEmpty()){
+        Medecin medInSession = authentificationService.toMedecin(sessionid);
+        Optional<Medecin> MedecinInDb=medecinRepository.findByMedLogin(medInSession.getMedLogin());
+        if(MedecinInDb.isEmpty()){
             throw new UserNotFoundException("Non trouver");
         }
-        return patientdb.get().getSessionId().equals(sessionid);
+        return MedecinInDb.get().getSessionId().equals(sessionid);
     }
 
     @Override

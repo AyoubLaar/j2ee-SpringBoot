@@ -1,6 +1,5 @@
 package com.example.projetj2E.models;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedecinToSearch {
-
+public class PatientToSearch {
     private String nom;
     private String prenom;
-    private String ville;
-    private String specialite;
-
 }

@@ -17,8 +17,6 @@ public interface MedecinRepository extends JpaRepository<Medecin,Long> {
       List<Medecin> findAllByVilleAndSpecialites(Ville ville, Specialite specialites);
       List<Medecin> findAllByVilleAndSpecialitesAndNom(Ville ville, Specialite specialites,String nom);
 
-      List<Medecin> findAllByPrenomAndNomAndVille(String prenom,String nom,Ville ville);
-
       List<Medecin> findAllByStatusDemande(StatusMedecin statusMedecin);
 
       List<Medecin> findAllByPrenomAndNom(String prenom, String nom);

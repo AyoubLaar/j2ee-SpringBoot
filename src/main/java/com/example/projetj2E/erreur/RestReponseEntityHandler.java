@@ -46,4 +46,13 @@ public class RestReponseEntityHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
+    @ExceptionHandler(RendezVousNotFound.class)
+    public ResponseEntity<MessageErreur> RendezVousNotFound( RendezVousNotFound exception){
+
+        MessageErreur message=new MessageErreur(HttpStatus.NOT_FOUND
+                ,exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
+
 }

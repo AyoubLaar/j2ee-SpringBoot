@@ -1,17 +1,15 @@
 package com.example.projetj2E.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedecinToDelete {
-
-    private Long id;
-    private String nom;
-    private String prenom;
-    private String ville;
-
+@Builder
+public class RdvToAcceptOrReject {
+    private Long rdvId;
+    private String statusRdv;
 }

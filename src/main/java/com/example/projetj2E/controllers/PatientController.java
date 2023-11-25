@@ -3,10 +3,7 @@ package com.example.projetj2E.controllers;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
 import com.example.projetj2E.erreur.UserNotFoundException;
-import com.example.projetj2E.models.MedecinToSearch;
-import com.example.projetj2E.models.PatientModel;
-import com.example.projetj2E.models.RdvModel;
-import com.example.projetj2E.models.User;
+import com.example.projetj2E.models.*;
 import com.example.projetj2E.services.PatientServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -44,16 +41,22 @@ public class PatientController {
         }
 
         @GetMapping("dashboard/recherche")
-        public ResponseEntity<Object> disponibilites(@RequestHeader("token") String sessionid,@RequestBody MedecinToSearch medecin ){
-                     return  patientServices.disponibilites(sessionid,medecin);
+        public ResponseEntity<Object> disponibilites(@RequestHeader("token") String sessionid,@RequestBody MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+                     return  patientServices.disponibilites(sessionid,medecinId);
         }
 
         @PutMapping("dashboard/recherche")
         @CrossOrigin
         public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
                 return   patientServices.choisirUnRdv(sessionid,rdvModel);
-
         }
+        @GetMapping ("/dashboard/mesRdv")
+        @CrossOrigin
+        public ResponseEntity<Object>  mesRdv(@RequestHeader(value = "token") String sessionid)
+                throws UserNotFoundException, HandleIncorrectAuthentification {
+                return patientServices.mesRdv(sessionid);
+        }
+
 
 
 }
