@@ -7,10 +7,10 @@
                         
 
         *Réalisé par:*                                 *Encadré par:*
-        Mariame Cissé
-        W
-        N
-        M
+        Cisse Mariame                                   Pr Mahmoud El Hamlaoui
+        Cisse Pape Waly
+        Alahyane Nour-Eddine
+        Laarouchi Ayoub
         
 *SOMMAIRE:*
 
@@ -34,9 +34,11 @@ III. Réalisation:
 *Tables Des Figures:*
 1. Diagramme de Cas d'Utilisation
 2. Diagramme de Classe
-3. Interface signin(medecin et patient)
-4. Interface signup(medecin et patient)
-5. Interface  dashboard(patient et medecin)
+3. page d'acceuil
+4. Interface signin(medecin et patient)
+5. Interface signup(medecin et patient)
+6. prise de rendez-vous patient
+7. Interface  dashboard(patient, medecin , admin)
 
 *Table Des Tableaux:*
 1. Table User
@@ -44,6 +46,8 @@ III. Réalisation:
 3. Table Patient
 4. Table Rendez-vous
 5. Table Specialité
+6. table médicament
+7. table prescription
 
 I. Introduction:
 
@@ -80,20 +84,25 @@ Pour les sites web on l’appelle généralement « le webmaster ». C’est cel
 
 .......
 
-2.3. Interface signin(medecin et patient)
+2.3page d'acceuil
+2.4 Interface signin(medecin ,patient,admin)
 
 L'implémentation de linterface Signin permettra aux medecins et patients à se connecter au site medical réaliser pour des différentes opérations. 
 
 ![Image4](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/2a543d9a-451a-43c3-9ca4-43656c909d99)
 
-2.4. Interface signup(medecin et patient)
+2.5. Interface signup(medecin et patient)
 
 L'implémentation de linterface Signup permettra aux medecins et patients à s'inscrire sur le site médical réaliser pour des différentes opérations. 
 
 ![Image5](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/5aee0ded-2bb5-4500-9b24-cca21b393f68)
+2.6 prise de rendez-vous
 
-2.5. Interface  dashboard(patient et medecin)
-L'implémentation de linterface dashboard permettra aux patients et medecins de réaliser des différentes opérations telle que consulter les demandes de rendez-vous et les rendez-vous à éffectuer 
+2.7. Interface  dashboard(patient,medecin,admin)
+L'implémentation de linterface dashboard permettra aux patients et medecins de réaliser des différentes opérations telle que consulter les demandes de rendez-vous et les rendez-vous à éffectuer .il permettra aussi a l'admin de gérer les patients et les medecins.
+   dashboard Admin:
+   dashboard patient:
+   dashboard Medecin
 
 III. Réalisation:
 
