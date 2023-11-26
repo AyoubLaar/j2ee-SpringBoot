@@ -78,7 +78,8 @@ Pour les sites web on l’appelle généralement « le webmaster ». C’est cel
 2.1. Diagramme de Cas d'Utilisation
 
  ![WhatsApp Image 2023-11-26 à 21 40 47_ec10d282](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/ab039dd7-4b74-41df-9e92-befadf401e13)
-   
+
+![Image2](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/0d22cd30-b270-4401-91a1-5e5ce8555848)
 2-2 Diagramme de Classe
 
 .......
