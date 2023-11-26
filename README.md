@@ -84,12 +84,13 @@ Pour les sites web on l’appelle généralement « le webmaster ». C’est cel
 
 L'implémentation de linterface Signin permettra aux medecins et patients à se connecter au site medical réaliser pour des différentes opérations. 
 
-
+![Image4](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/2a543d9a-451a-43c3-9ca4-43656c909d99)
 
 2.4. Interface signup(medecin et patient)
-   signin pattie
 
 L'implémentation de linterface Signup permettra aux medecins et patients à s'inscrire sur le site médical réaliser pour des différentes opérations. 
+
+
 
 2.5. Interface  dashboard(patient et medecin)
 L'implémentation de linterface dashboard permettra aux patients et medecins de réaliser des différentes opérations telle que consulter les demandes de rendez-vous et les rendez-vous à éffectuer 
