@@ -34,15 +34,9 @@ III. Réalisation:
 *Tables Des Figures:*
 1. Diagramme de Cas d'Utilisation
 2. Diagramme de Classe
-3. Interface Medecin Repository
-4. Interface Patient Repository
-5. Interface Rendez-vous Repository
-6. Interface Specialité Repository
-7. Interface Authentification Service
-8. Interface Medecin Services
-9. Interface Patient Services
-10. Interface Rendez-vous Services
-11. Interface Specialité Services
+3. Interface signin(medecin et patient)
+4. Interface signup(medecin et patient)
+5. Interface  dashboard(patient et medecin)
 
 *Table Des Tableaux:*
 1. Table User
@@ -74,16 +68,31 @@ C’est un visiteur ayant déjà créer un compte sur notre site en tant que pat
   ❖ L’administrateur : 
 Pour les sites web on l’appelle généralement « le webmaster ». C’est celui qui assure le dynamisme du site et veille sur les mises à jour des médecins.
 
-2. Language de Modélisation Unifié (UML);
+2. Language de Modélisation Unifié (UML):
+   
 2.1. Diagramme de Cas d'Utilisation
 
  ![WhatsApp Image 2023-11-26 à 21 40 47_ec10d282](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/ab039dd7-4b74-41df-9e92-befadf401e13)
 
 ![Image2](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/0d22cd30-b270-4401-91a1-5e5ce8555848)
+
 2-2 Diagramme de Classe
 
 .......
 
+2.3. Interface signin(medecin et patient)
+
+L'implémentation de linterface Signin permettra aux medecins et patients à se connecter au site medical réaliser pour des différentes opérations. 
+
+
+
+2.4. Interface signup(medecin et patient)
+   signin pattie
+
+L'implémentation de linterface Signup permettra aux medecins et patients à s'inscrire sur le site médical réaliser pour des différentes opérations. 
+
+2.5. Interface  dashboard(patient et medecin)
+L'implémentation de linterface dashboard permettra aux patients et medecins de réaliser des différentes opérations telle que consulter les demandes de rendez-vous et les rendez-vous à éffectuer 
 
 III. Réalisation:
 
