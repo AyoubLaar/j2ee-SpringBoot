@@ -3,6 +3,7 @@ package com.example.projetj2E.services;
 import com.example.projetj2E.entites.*;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.RendezVousExisteDeja;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.*;
@@ -102,7 +103,7 @@ public class PatientServiceImpl implements PatientServices{
     @Override
      public ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification {
         // authentifier patient
-        if(!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
+        if (!verifierAuthentification.verifyAuthentificationPatient(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Specialite medspecialite = Specialite.builder()
@@ -112,48 +113,47 @@ public class PatientServiceImpl implements PatientServices{
         if(!(medecinToSearch.getNom()==null)){
             List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialitesAndNom(ville, medspecialite
                     ,medecinToSearch.getNom());
-            if (!medecins.isEmpty()) {
-
-                List<Map<String, Object>> medecinstrouves = new ArrayList<>();
-                for (Medecin medecin : medecins) {
-                    if(medecin.getAutorisation().equals(Autorisation.Autoriser)){
-                        Map<String, Object> medecin_json = new HashMap<>();
-                        medecin_json.put("nom", medecin.getNom());
-                        medecin_json.put("prenom", medecin.getPrenom());
-                        medecin_json.put("ville", medecin.getVille());
-                        medecin_json.put("sexe", medecin.getSexe());
-                        medecin_json.put("address_cabinet", medecin.getAdressCabinet());
-                        medecin_json.put("specialite", specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
-                        medecin_json.put("id", medecin.getMedecinId());
-                        medecinstrouves.add(medecin_json);
-                    }
-                }
-                return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
-            } else {
+            if (medecins.isEmpty()) {
                 throw new UserNotFoundException("Medecin non trouvé");
             }
+            List<Map<String, Object>> medecinstrouves = new ArrayList<>();
+            for (Medecin medecin : medecins) {
+                if(medecin.getAutorisation().equals(Autorisation.Autoriser)){
+                    Map<String, Object> medecin_json = new HashMap<>();
+                    medecin_json.put("nom", medecin.getNom());
+                    medecin_json.put("prenom", medecin.getPrenom());
+                    medecin_json.put("ville",medecin.getVille());
+                    medecin_json.put("sexe",medecin.getSexe());
+                    medecin_json.put("address_cabinet",medecin.getAdressCabinet());
+                    medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
+                    medecin_json.put("id",medecin.getMedecinId())  ;
+                    medecinstrouves.add(medecin_json);
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
         }
-
         List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialites(ville, medspecialite);
-
         if (medecins.isEmpty()) {
             throw new UserNotFoundException("Medecin non trouvé");
         }
         List<Map<String, Object>> medecinstrouves = new ArrayList<>();
         for (Medecin medecin : medecins) {
-            Map<String, Object> medecin_json = new HashMap<>();
-            medecin_json.put("nom", medecin.getNom());
-            medecin_json.put("prenom", medecin.getPrenom());
-            medecin_json.put("ville",medecin.getVille());
-            medecin_json.put("sexe",medecin.getSexe());
-            medecin_json.put("address_cabinet",medecin.getAdressCabinet());
-            medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
-            medecin_json.put("id",medecin.getMedecinId())  ;
-            medecinstrouves.add(medecin_json);
+            if(medecin.getAutorisation().equals(Autorisation.Autoriser)){
+                Map<String, Object> medecin_json = new HashMap<>();
+                medecin_json.put("nom", medecin.getNom());
+                medecin_json.put("prenom", medecin.getPrenom());
+                medecin_json.put("ville",medecin.getVille().getNomVille());
+                medecin_json.put("sexe",medecin.getSexe());
+                medecin_json.put("address_cabinet",medecin.getAdressCabinet());
+                medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
+                medecin_json.put("id",medecin.getMedecinId())  ;
+                medecinstrouves.add(medecin_json);
+            }
+
         }
         return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
-
     }
+
 
     @Override
     public List<Patient> trouverParPrenomEtNom(String prenom, String nom) {
@@ -171,7 +171,8 @@ public class PatientServiceImpl implements PatientServices{
         List<RendezVous> tousmesrdv=patient.getMesrendezvous();
         List<Map<String, Object>> mesRdv= new ArrayList<>();
         for (RendezVous demande : tousmesrdv) {
-            if ((demande.getStatusRdv().equals(StatusRdv.Attente)))
+            rdvService.mettreAjourEtatRdv(demande);
+            if ((demande.getStatusRdv().equals(StatusRdv.Accepter)))
             {
                 Map<String, Object> Rendezvous_json = new HashMap<>();
                 Rendezvous_json.put("rdvId",demande.getRdvId());
@@ -235,24 +236,27 @@ public class PatientServiceImpl implements PatientServices{
 
     @Transactional
     @Override
-    public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification, RendezVousExisteDeja {
         if(!verifierAuthentification.verifyAuthentificationPatient(sessionId)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
         Optional<Medecin> medecin=medecinRepository.findById(rdvModel.getMedecinId());
-        if(medecin.isEmpty()){
-            throw  new UserNotFoundException("medecin n'existe pas");
+        if (medecin.isPresent()) {
+            Patient patient = authentificationService.toPatient(sessionId);
+            if(!rdvService.VerifyPatientHaveRdvAtSameTime(patient,rdvModel)){
+                RendezVous rendezVous = new RendezVous();
+                rendezVous.setHeureRdv(LocalTime.of(Integer.parseInt(rdvModel.getHeureRdv()), 0));
+                rendezVous.setDateRdv(rdvModel.getDateRdv());
+                rendezVous.setStatusRdv(StatusRdv.Attente);
+                rendezVousRepository.save(rendezVous);
+                rendezVous.setMedecin(medecin.get());
+                rendezVous.setPatient(patient);
+                rendezVousRepository.save(rendezVous);
+                return ResponseEntity.status(200).body("saved");
+            }else throw new RendezVousExisteDeja("Rdv existe");
+        } else {
+            throw new UserNotFoundException("medecin n'existe pas");
         }
-        Patient patient=authentificationService.toPatient(sessionId);
-        RendezVous rendezVous=new RendezVous();
-        rendezVous.setHeureRdv(LocalTime.of(Integer.parseInt(rdvModel.getHeureRdv()),0));
-        rendezVous.setDateRdv(rdvModel.getDateRdv());
-        rendezVous.setStatusRdv(StatusRdv.Attente);
-        rendezVousRepository.save(rendezVous);
-        rendezVous.setMedecin(medecin.get());
-        rendezVous.setPatient(patient);
-        rendezVousRepository.save(rendezVous);
-        return ResponseEntity.status(200).body("saved");
     }
 
 

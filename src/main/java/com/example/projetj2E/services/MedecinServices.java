@@ -32,4 +32,5 @@ public interface MedecinServices {
     Optional<Medecin> findById(Long id);
     Optional<Medecin> findByMedecinLogin(String login);
 
+    ResponseEntity<String> annulerRdv(Long rdvId, String sessionId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound;
 }

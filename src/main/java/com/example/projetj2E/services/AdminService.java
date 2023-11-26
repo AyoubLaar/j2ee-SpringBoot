@@ -19,7 +19,7 @@ public interface AdminService {
 
     ResponseEntity<String> bloquerMedecin(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification;
 
-    ResponseEntity<String> saveAdmin(User user);
+    ResponseEntity<String> saveAdmin(String login, String password);
 
     ResponseEntity<String> accepterOrRejectMedecin(String sessionid, AcceptOrReject medecin) throws UserNotFoundException, HandleIncorrectAuthentification;
 

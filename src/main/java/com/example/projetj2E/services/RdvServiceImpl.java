@@ -1,9 +1,11 @@
 package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Medecin;
+import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.entites.RendezVous;
 import com.example.projetj2E.entites.StatusRdv;
 import com.example.projetj2E.erreur.RendezVousNotFound;
+import com.example.projetj2E.models.RdvModel;
 import com.example.projetj2E.repository.RendezVousRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class RdvServiceImpl implements RdvService {
@@ -96,6 +95,26 @@ public class RdvServiceImpl implements RdvService {
     @Override
     public void save(List<RendezVous> rdv) {
         rendezVousRepository.saveAll(rdv);
+    }
+
+    @Override
+    public boolean VerifyPatientHaveRdvAtSameTime(Patient patient,RdvModel rdvModel) {
+         boolean aUnRdv=false;
+         List<RendezVous> lisrdv=patient.getMesrendezvous();
+         for (RendezVous rdv :lisrdv){
+              if(rdvModel.getDateRdv().equals(rdv.getDateRdv())&&
+                      rdv.getHeureRdv().equals(
+                              LocalTime.of(Integer.parseInt(rdvModel.getHeureRdv()),0))
+              ){
+                 return true;
+              }
+         }return aUnRdv;
+    }
+
+    @Override
+    public void annulerRdv(RendezVous rdv) {
+        rdv.setStatusRdv(StatusRdv.Annuler);
+        rendezVousRepository.save(rdv);
     }
 
 

@@ -11,4 +11,6 @@ public interface SpecialiteService {
     List<String> getAllSpecialites();
 
     public List<String> getMedecinSpecialites(List<Specialite> specialites);
+
+    void saveAlltheSpecialities(List<String> specialites);
 }

@@ -59,4 +59,10 @@ public class SpecialiteServiceImp implements SpecialiteService{
 
     }
 
+    @Override
+    public void saveAlltheSpecialities(List<String> specialites) {
+            specialiteRepository.saveAll( returnSpecialites(specialites));
+    }
+
+
 }

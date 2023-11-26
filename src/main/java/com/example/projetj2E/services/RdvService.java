@@ -1,8 +1,10 @@
 package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Medecin;
+import com.example.projetj2E.entites.Patient;
 import com.example.projetj2E.entites.RendezVous;
 import com.example.projetj2E.erreur.RendezVousNotFound;
+import com.example.projetj2E.models.RdvModel;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -32,4 +34,7 @@ public interface RdvService {
     void save(List<RendezVous> rdvModifier);
 
 
+   boolean VerifyPatientHaveRdvAtSameTime(Patient patient,RdvModel rdvModel);
+
+    void annulerRdv(RendezVous rdvFound);
 }

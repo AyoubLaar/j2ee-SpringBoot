@@ -54,5 +54,13 @@ public class RestReponseEntityHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
+    @ExceptionHandler(RendezVousExisteDeja.class)
+    public ResponseEntity<MessageErreur>  RendezVousExisteDeja(RendezVousExisteDeja exception){
+
+        MessageErreur message=new MessageErreur(HttpStatus.CONFLICT
+                ,exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.projetj2E.entites;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,7 @@ public class Medecin {
             nullable = false,
             updatable = false
     )
+    @Email
     private String medLogin;
 
     @Column(

@@ -1,10 +1,7 @@
 package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Patient;
-import com.example.projetj2E.erreur.GereExistEmailException;
-import com.example.projetj2E.erreur.GereMedecinNotFound;
-import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
-import com.example.projetj2E.erreur.UserNotFoundException;
+import com.example.projetj2E.erreur.*;
 import com.example.projetj2E.models.*;
 import org.springframework.http.ResponseEntity;
 
@@ -21,7 +18,7 @@ public interface PatientServices {
 
      ResponseEntity<Object> disponibilites(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification;
 
-    ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification;
+    ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification, RendezVousExisteDeja;
 
     ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification;
 

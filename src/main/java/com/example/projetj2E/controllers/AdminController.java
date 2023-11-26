@@ -19,13 +19,6 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/signup")
-    @CrossOrigin
-    public ResponseEntity<String> saveAdmin(@RequestBody User user)
-             {
-        return  adminService.saveAdmin(user);
-
-    }
     @PostMapping("/signin")
     @CrossOrigin
     public ResponseEntity<String> authentifierUser(@RequestBody User admin)

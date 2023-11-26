@@ -67,9 +67,14 @@ public class MedecinServicesImpl implements MedecinServices {
         medecin.setMedLogin(medecinModel.getMedLogin());
         medecin.setAutorisation(Autorisation.NonAutoriser);
         List<Specialite> specialites = specialiteService.returnSpecialites(medecinModel.getSpecialites());
-        specialiteRepository.saveAll(specialites);// a éliminer seulement pour tester
         medecin.setSpecialites(specialites);
-        medecinRepository.save(medecin);
+        try{
+            medecinRepository.save(medecin);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body("ERROR");
+        }
+
 
         return ResponseEntity.status(HttpStatus.OK).body(sessionId);
 
@@ -167,7 +172,6 @@ public class MedecinServicesImpl implements MedecinServices {
 
     @Override
     public ResponseEntity<String> rejeterMedecin(Medecin medecin) {
-        medecin.setCodeOrdreMedecin(null);
         medecin.setStatusDemande(StatusMedecin.Rejeter);
         medecinRepository.save(medecin);
         return ResponseEntity.status(HttpStatus.OK).body("rejeter");
@@ -220,5 +224,17 @@ public class MedecinServicesImpl implements MedecinServices {
         return medecinRepository.findByMedLogin(login);
     }
 
+    @Override
+    public ResponseEntity<String> annulerRdv(Long rdvId, String sessionId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
+        if (!verifierAuthentification.verifyAuthentificationMedecin(sessionId)){
+            throw new HandleIncorrectAuthentification("Non authentifié");
+        }
+        Optional<RendezVous> optionalRendezVous=rendezVousRepository.findById(rdvId);
+        if(optionalRendezVous.isPresent()) {
+            RendezVous rdvFound = optionalRendezVous.get();
+            rdvService.annulerRdv(rdvFound);
+            return  ResponseEntity.status(HttpStatus.OK).body("accepter");
+        }throw new RendezVousNotFound("rdv n'existe pas");
 
+}
 }

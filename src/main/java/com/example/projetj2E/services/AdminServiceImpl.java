@@ -7,14 +7,13 @@ import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.hassing.HassingAndMatchingTester;
 import com.example.projetj2E.models.*;
 import com.example.projetj2E.repository.AdminRepository;
-import com.example.projetj2E.repository.MedecinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
-import java.time.LocalTime;
+
 import java.util.*;
 
 
@@ -69,13 +68,18 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public ResponseEntity<String> saveAdmin(User user) {
+    public ResponseEntity<String> saveAdmin(String login, String password) {
         Admin admin = Admin.builder()
-                .login(user.getLogin())
-                .password(HassingAndMatchingTester.passwordtohash(user.getPassword()))
+                .login(login)
+                .password(HassingAndMatchingTester.passwordtohash(password))
                 .build();
-        adminRepository.save(admin);
-        return ResponseEntity.status(HttpStatus.OK).body("saved");
+        try{
+            adminRepository.save(admin);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body("ERROR");
+        }
+       return ResponseEntity.ok().body("saved");
     }
 
     @Override

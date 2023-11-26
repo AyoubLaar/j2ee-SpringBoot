@@ -57,6 +57,14 @@ public class MedecinController {
                 return  medecinServices.acceptOrRejectDemand(rdv,sessionId);
     }
 
+    @PutMapping("/dashbaord/mesRdv/annuler")
+    public ResponseEntity<String> annulerRdv(@RequestHeader(value = "token") String sessionId,
+                                                       @RequestParam Long rdvId) throws UserNotFoundException,
+            HandleIncorrectAuthentification, RendezVousNotFound
+    {
+        return  medecinServices.annulerRdv(rdvId,sessionId);
+    }
+
 
 
 }

@@ -2,6 +2,7 @@ package com.example.projetj2E.controllers;
 
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.RendezVousExisteDeja;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.*;
 import com.example.projetj2E.services.PatientServices;
@@ -48,7 +49,7 @@ public class PatientController {
 
         @PutMapping("dashboard/recherche")
         @CrossOrigin
-        public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification {
+        public ResponseEntity<String> choisirUnRdv(@RequestHeader("token") String sessionid, @RequestBody RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification, RendezVousExisteDeja {
                 return   patientServices.choisirUnRdv(sessionid,rdvModel);
         }
         @GetMapping ("/dashboard/mesRdv")
