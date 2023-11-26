@@ -6,6 +6,7 @@ import com.example.projetj2E.erreur.RendezVousNotFound;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +17,6 @@ public interface RdvService {
     void rejeterRdv(RendezVous rdv);
 
     void rejectAllTheSameTimRdvWith(RendezVous rdv);
-
-    boolean verifieValidRdv(RendezVous rdv);
 
     void reporterRdv(RendezVous rdv);
 
@@ -31,4 +30,6 @@ public interface RdvService {
     void actualiserRdv(RendezVous rdv) throws RendezVousNotFound;
 
     void save(List<RendezVous> rdvModifier);
+
+
 }

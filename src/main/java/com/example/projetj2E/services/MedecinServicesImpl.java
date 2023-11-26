@@ -110,8 +110,7 @@ public class MedecinServicesImpl implements MedecinServices {
             List<Map<String, Object>> medemandes = new ArrayList<>();
             for (RendezVous demande : tousmesrdv) {
                 rdvService.mettreAjourEtatRdv(demande);
-                if (demande.getStatusRdv().equals(StatusRdv.Attente) &&
-                        demande.getStatusDemandeRdv().equals(StatusDemandeRdv.Attente)
+                if (demande.getStatusRdv().equals(StatusRdv.Attente)
                 ) {
                     Map<String, Object> Rendezvous_json = new HashMap<>();
                     Rendezvous_json.put("rdvId", demande.getRdvId());
@@ -188,12 +187,11 @@ public class MedecinServicesImpl implements MedecinServices {
         List<RendezVous> tousmesrdv=medecin.getMesrendezvous();
         List<Map<String, Object>> mesRdv= new ArrayList<>();
         for (RendezVous demande : tousmesrdv) {
-            if (rdvService.verifieValidRdv(demande))
+            if (demande.getStatusRdv().equals(StatusRdv.Accepter))
             {
                 Map<String, Object> Rendezvous_json = new HashMap<>();
                 Rendezvous_json.put("rdvId",demande.getRdvId());
                 Patient patient =demande.getPatient();
-                Rendezvous_json.put("statusDemande",demande.getStatusDemandeRdv());
                 Rendezvous_json.put("statusRdv",demande.getStatusRdv());
                 Rendezvous_json.put("nom",patient.getNom());
                 Rendezvous_json.put("prenom",patient.getPrenom());

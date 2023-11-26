@@ -112,22 +112,26 @@ public class PatientServiceImpl implements PatientServices{
         if(!(medecinToSearch.getNom()==null)){
             List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialitesAndNom(ville, medspecialite
                     ,medecinToSearch.getNom());
-            if (medecins.isEmpty()) {
+            if (!medecins.isEmpty()) {
+
+                List<Map<String, Object>> medecinstrouves = new ArrayList<>();
+                for (Medecin medecin : medecins) {
+                    if(medecin.getAutorisation().equals(Autorisation.Autoriser)){
+                        Map<String, Object> medecin_json = new HashMap<>();
+                        medecin_json.put("nom", medecin.getNom());
+                        medecin_json.put("prenom", medecin.getPrenom());
+                        medecin_json.put("ville", medecin.getVille());
+                        medecin_json.put("sexe", medecin.getSexe());
+                        medecin_json.put("address_cabinet", medecin.getAdressCabinet());
+                        medecin_json.put("specialite", specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
+                        medecin_json.put("id", medecin.getMedecinId());
+                        medecinstrouves.add(medecin_json);
+                    }
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
+            } else {
                 throw new UserNotFoundException("Medecin non trouvé");
             }
-            List<Map<String, Object>> medecinstrouves = new ArrayList<>();
-            for (Medecin medecin : medecins) {
-                Map<String, Object> medecin_json = new HashMap<>();
-                medecin_json.put("nom", medecin.getNom());
-                medecin_json.put("prenom", medecin.getPrenom());
-                medecin_json.put("ville",medecin.getVille());
-                medecin_json.put("sexe",medecin.getSexe());
-                medecin_json.put("address_cabinet",medecin.getAdressCabinet());
-                medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
-                medecin_json.put("id",medecin.getMedecinId())  ;
-                medecinstrouves.add(medecin_json);
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
         }
 
         List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialites(ville, medspecialite);
@@ -167,12 +171,11 @@ public class PatientServiceImpl implements PatientServices{
         List<RendezVous> tousmesrdv=patient.getMesrendezvous();
         List<Map<String, Object>> mesRdv= new ArrayList<>();
         for (RendezVous demande : tousmesrdv) {
-            if (rdvService.verifieValidRdv(demande))
+            if ((demande.getStatusRdv().equals(StatusRdv.Attente)))
             {
                 Map<String, Object> Rendezvous_json = new HashMap<>();
                 Rendezvous_json.put("rdvId",demande.getRdvId());
                 Medecin medecin =demande.getMedecin();
-                Rendezvous_json.put("statusDemande",demande.getStatusDemandeRdv());
                 Rendezvous_json.put("statusRdv",demande.getStatusRdv());
                 Rendezvous_json.put("nom",medecin.getNom());
                 Rendezvous_json.put("prenom",medecin.getPrenom());
@@ -193,9 +196,7 @@ public class PatientServiceImpl implements PatientServices{
             List<Map<String, Object>> medemandes = new ArrayList<>();
             for (RendezVous demande : tousmesrdv) {
                 rdvService.mettreAjourEtatRdv(demande);
-                if (demande.getStatusRdv().equals(StatusRdv.Attente) &&
-                       !demande.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter)
-                ) {
+                if (!demande.getStatusRdv().equals(StatusRdv.Accepter)) {
                     Map<String, Object> Rendezvous_json = new HashMap<>();
                     Rendezvous_json.put("rdvId", demande.getRdvId());
                     Medecin medecin = demande.getMedecin();
@@ -215,11 +216,11 @@ public class PatientServiceImpl implements PatientServices{
     }
 
     @Override
-    public  ResponseEntity<Object> disponibilites(String sessionid, MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public  ResponseEntity<Object> disponibilites(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
         if(!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
-        Optional<Medecin> optionalMedecin=medecinRepository.findById(medecinId.getId());
+        Optional<Medecin> optionalMedecin=medecinRepository.findById(medecinId);
         if(optionalMedecin.isPresent()){
             Map<LocalDate,List<Long>> heuresindispo=rdvService.findUnavailabilityForMedecin(optionalMedecin.get());
             Map<String ,Object> indispo_json=new HashMap<>();
@@ -246,7 +247,6 @@ public class PatientServiceImpl implements PatientServices{
         RendezVous rendezVous=new RendezVous();
         rendezVous.setHeureRdv(LocalTime.of(Integer.parseInt(rdvModel.getHeureRdv()),0));
         rendezVous.setDateRdv(rdvModel.getDateRdv());
-        rendezVous.setStatusDemandeRdv(StatusDemandeRdv.Attente);
         rendezVous.setStatusRdv(StatusRdv.Attente);
         rendezVousRepository.save(rendezVous);
         rendezVous.setMedecin(medecin.get());

@@ -42,8 +42,6 @@ public class RendezVous {
     )
     private Patient patient;
     @Enumerated(EnumType.STRING)
-    private StatusDemandeRdv statusDemandeRdv;
-    @Enumerated(EnumType.STRING)
     private StatusRdv statusRdv;
 
 

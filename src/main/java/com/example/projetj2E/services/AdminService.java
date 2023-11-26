@@ -17,7 +17,7 @@ public interface AdminService {
 
     ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, MedecinToSearch medecin) throws UserNotFoundException, HandleIncorrectAuthentification;
 
-    ResponseEntity<String> bloquerMedecin(String sessionid, MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification;
+    ResponseEntity<String> bloquerMedecin(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification;
 
     ResponseEntity<String> saveAdmin(User user);
 
@@ -27,9 +27,7 @@ public interface AdminService {
 
     ResponseEntity<Object> chercherPatient(String sessionid, PatientToSearch patient) throws UserNotFoundException, HandleIncorrectAuthentification;
 
-    ResponseEntity<Object> bloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException;
+    ResponseEntity<Object> bloquerPatient(String sessionid, Long patientId) throws HandleIncorrectAuthentification, UserNotFoundException;
 
-    List<LocalTime> RdvIndisponibles(RendezVous rdv);
-
-    ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound;
+    ResponseEntity<Object> debloquerPatient(String sessionid, Long patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound;
 }

@@ -1,7 +1,7 @@
 package com.example.projetj2E.entites;
 
 public enum StatusRdv {
-    Attente,Effectuer,Rejeter,Reporter,Annuler,NonEffectuer
+    Attente,Effectuer,Accepter,Rejeter,Supprimer,Annuler,NonEffectuer
 
     /*  le rdv peut être en Attente car pas encore fait
          le rdv peut etre deja effectuer

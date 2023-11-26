@@ -19,7 +19,7 @@ public interface PatientServices {
     ResponseEntity<String> savePatient(PatientModel patientModel) throws GereExistEmailException;
     ResponseEntity<String> authentifierUser(User patient) throws HandleIncorrectAuthentification, UserNotFoundException;
 
-     ResponseEntity<Object> disponibilites(String sessionid, MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification;
+     ResponseEntity<Object> disponibilites(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification;
 
     ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification;
 

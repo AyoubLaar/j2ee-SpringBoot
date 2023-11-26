@@ -2,7 +2,6 @@ package com.example.projetj2E.services;
 
 import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.entites.RendezVous;
-import com.example.projetj2E.entites.StatusDemandeRdv;
 import com.example.projetj2E.entites.StatusRdv;
 import com.example.projetj2E.erreur.RendezVousNotFound;
 import com.example.projetj2E.repository.RendezVousRepository;
@@ -25,13 +24,12 @@ public class RdvServiceImpl implements RdvService {
 
     @Override
     public void accepterRdv(RendezVous rdv) {
-        rdv.setStatusDemandeRdv(StatusDemandeRdv.Accepter);
+        rdv.setStatusRdv(StatusRdv.Accepter);
         rendezVousRepository.save(rdv);
     }
 
     @Override
     public void rejeterRdv(RendezVous rdv) {
-        rdv.setStatusDemandeRdv(StatusDemandeRdv.Rejeter);
         rdv.setStatusRdv(StatusRdv.Rejeter);
         rendezVousRepository.save(rdv);
     }
@@ -39,37 +37,27 @@ public class RdvServiceImpl implements RdvService {
     @Transactional
     @Override
     public void rejectAllTheSameTimRdvWith(RendezVous rdv) {
-        List<RendezVous> rendezVous = rendezVousRepository.findAllByMedecin(rdv.getMedecin());
-        for (RendezVous rendezVs : rendezVous) {
-            if (rendezVs.getStatusDemandeRdv().equals(StatusDemandeRdv.Attente) &&
-                    rendezVs.getDateRdv().equals(rdv.getDateRdv()) &&
-                    rendezVs.getHeureRdv().equals(rdv.getHeureRdv())
+        List<RendezVous> listRdvDuMedecin = rendezVousRepository.findAllByMedecin(rdv.getMedecin());
+        for (RendezVous rdvDuMedecin : listRdvDuMedecin) {
+            if (rdvDuMedecin.getStatusRdv().equals(StatusRdv.Attente) &&
+                    rdvDuMedecin.getDateRdv().equals(rdv.getDateRdv()) &&
+                    rdvDuMedecin.getHeureRdv().equals(rdv.getHeureRdv())
             ) rejeterRdv(rdv);
         }
     }
 
-    @Override
-    public boolean verifieValidRdv(RendezVous rdv) {
-        return ((rdv.getStatusRdv().equals(StatusRdv.Attente) ||
-                rdv.getStatusRdv().equals(StatusRdv.Reporter)) &&
-                rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter));
-    }
 
     @Override
     public void reporterRdv(RendezVous rdv) {
-        if (rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter) &&
-                (rdv.getStatusRdv().equals(StatusRdv.Attente))
-        ) {
-            rdv.setStatusRdv(StatusRdv.Reporter);
-
+        if (rdv.getStatusRdv().equals(StatusRdv.Accepter)) {
+            rdv.setStatusRdv(StatusRdv.Annuler);
         }
     }
 
     @Override
     public void supprimerRdv(RendezVous rdv) {
-        if (rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Attente)) {
-            rdv.setStatusDemandeRdv(StatusDemandeRdv.Supprimer);
-        }
+            rdv.setStatusRdv(StatusRdv.Supprimer);
+
     }
 
     @Override
@@ -89,29 +77,27 @@ public class RdvServiceImpl implements RdvService {
         }
         return unavailableRdv;
     }
+    @Transactional
     @Override
     public void actualiserRdv(RendezVous rdv) throws RendezVousNotFound {
-        if (rdv.getStatusRdv().equals(StatusRdv.Reporter) && LocalDate.now().isBefore(rdv.getDateRdv())) {
+        if ( (rdv.getStatusRdv().equals(StatusRdv.Annuler)||
+                (rdv.getStatusRdv().equals(StatusRdv.Supprimer)) &&
+                        rdv.getDateRdv().isAfter(LocalDate.now()))) {
             List<Long> heuresindispo = findUnavailabilityForMedecin(rdv.getMedecin()).get(rdv.getDateRdv());
             if (heuresindispo.contains( rdv.getHeureRdv())) {
-                rdv.setStatusDemandeRdv(StatusDemandeRdv.Supprimer);
-                rdv.setStatusRdv(StatusRdv.NonEffectuer);
+                rdv.setStatusRdv(StatusRdv.Supprimer);
                 throw  new RendezVousNotFound("!!!veillez choisir un autre rdv");
             } else {
-                rdv.setStatusDemandeRdv(StatusDemandeRdv.Attente);
                 rdv.setStatusRdv(StatusRdv.Attente);
             }
-        } else if ((rdv.getStatusDemandeRdv().equals(StatusDemandeRdv.Supprimer) &&
-                LocalDate.now().isBefore(rdv.getDateRdv().minusDays(1)))) {
-            rdv.setStatusDemandeRdv(StatusDemandeRdv.Attente);
-            rdv.setStatusRdv(StatusRdv.Attente);
-        }else{rdv.setStatusRdv(StatusRdv.NonEffectuer);}
+        }
     }
 
     @Override
     public void save(List<RendezVous> rdv) {
         rendezVousRepository.saveAll(rdv);
     }
+
 
     @Transactional
     @Override

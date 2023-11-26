@@ -1,5 +1,6 @@
 package com.example.projetj2E.services;
 
+import com.example.projetj2E.entites.Autorisation;
 import com.example.projetj2E.entites.Medecin;
 import com.example.projetj2E.entites.Specialite;
 import com.example.projetj2E.entites.Ville;
@@ -42,35 +43,38 @@ public class VisitorServiceImpl implements VisitorService{
             }
             List<Map<String, Object>> medecinstrouves = new ArrayList<>();
             for (Medecin medecin : medecins) {
+                if(medecin.getAutorisation().equals(Autorisation.Autoriser)){
+                    Map<String, Object> medecin_json = new HashMap<>();
+                    medecin_json.put("nom", medecin.getNom());
+                    medecin_json.put("prenom", medecin.getPrenom());
+                    medecin_json.put("ville",medecin.getVille());
+                    medecin_json.put("sexe",medecin.getSexe());
+                    medecin_json.put("address_cabinet",medecin.getAdressCabinet());
+                    medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
+                    medecin_json.put("id",medecin.getMedecinId())  ;
+                    medecinstrouves.add(medecin_json);
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
+        }
+        List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialites(ville, medspecialite);
+        if (medecins.isEmpty()) {
+            throw new UserNotFoundException("Medecin non trouvé");
+        }
+        List<Map<String, Object>> medecinstrouves = new ArrayList<>();
+        for (Medecin medecin : medecins) {
+            if(medecin.getAutorisation().equals(Autorisation.Autoriser)){
                 Map<String, Object> medecin_json = new HashMap<>();
                 medecin_json.put("nom", medecin.getNom());
                 medecin_json.put("prenom", medecin.getPrenom());
-                medecin_json.put("ville",medecin.getVille());
+                medecin_json.put("ville",medecin.getVille().getNomVille());
                 medecin_json.put("sexe",medecin.getSexe());
                 medecin_json.put("address_cabinet",medecin.getAdressCabinet());
                 medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
                 medecin_json.put("id",medecin.getMedecinId())  ;
                 medecinstrouves.add(medecin_json);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
-        }
 
-        List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialites(ville, medspecialite);
-
-        if (medecins.isEmpty()) {
-            throw new UserNotFoundException("Medecin non trouvé");
-        }
-        List<Map<String, Object>> medecinstrouves = new ArrayList<>();
-        for (Medecin medecin : medecins) {
-            Map<String, Object> medecin_json = new HashMap<>();
-            medecin_json.put("nom", medecin.getNom());
-            medecin_json.put("prenom", medecin.getPrenom());
-            medecin_json.put("ville",medecin.getVille().getNomVille());
-            medecin_json.put("sexe",medecin.getSexe());
-            medecin_json.put("address_cabinet",medecin.getAdressCabinet());
-            medecin_json.put("specialite",specialiteService.getMedecinSpecialites(medecin.getSpecialites()));
-            medecin_json.put("id",medecin.getMedecinId())  ;
-            medecinstrouves.add(medecin_json);
         }
         return ResponseEntity.status(HttpStatus.OK).body(medecinstrouves);
 

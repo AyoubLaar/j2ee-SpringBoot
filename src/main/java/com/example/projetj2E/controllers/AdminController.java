@@ -1,6 +1,7 @@
 package com.example.projetj2E.controllers;
 import com.example.projetj2E.erreur.GereExistEmailException;
 import com.example.projetj2E.erreur.HandleIncorrectAuthentification;
+import com.example.projetj2E.erreur.RendezVousNotFound;
 import com.example.projetj2E.erreur.UserNotFoundException;
 import com.example.projetj2E.models.*;
 import com.example.projetj2E.services.AdminService;
@@ -49,7 +50,7 @@ public class AdminController {
     @PutMapping("dashboard/recherche/patient")
     @CrossOrigin
     public ResponseEntity<Object> bloquerPatient(@RequestHeader("token") String sessionid,
-                                                   @RequestBody PatientId patientId )
+                                                   @RequestParam Long patientId )
             throws UserNotFoundException, HandleIncorrectAuthentification {
         return adminService.bloquerPatient(sessionid,patientId);
     }
@@ -57,7 +58,7 @@ public class AdminController {
     @PutMapping("/dashboard/recherche/medecin")
     @CrossOrigin
     public ResponseEntity<String> bloquerMedecin(@RequestHeader("token") String sessionid,
-                                                   @RequestBody MedecinId medecinId)
+                                                   @RequestParam Long medecinId)
             throws UserNotFoundException, HandleIncorrectAuthentification {
         return adminService.bloquerMedecin(sessionid,medecinId);
     }
@@ -79,8 +80,8 @@ public class AdminController {
     @PutMapping("dashboard/patient/bloque")
     @CrossOrigin
     public ResponseEntity<Object> debloquerPatient(@RequestHeader("token") String sessionid,
-                                                 @RequestBody PatientId patientId )
-            throws UserNotFoundException, HandleIncorrectAuthentification {
+                                                 @RequestParam Long patientId )
+            throws UserNotFoundException, HandleIncorrectAuthentification, RendezVousNotFound {
         return adminService.debloquerPatient(sessionid,patientId);
     }
 

@@ -144,11 +144,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public ResponseEntity<Object> bloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<Object> bloquerPatient(String sessionid,Long patientId) throws HandleIncorrectAuthentification, UserNotFoundException {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
-        Optional<Patient> optionalPatient = patientServices.findById(patientId.getId());
+        Optional<Patient> optionalPatient = patientServices.findById(patientId);
         if (optionalPatient.isEmpty()) {
             throw new UserNotFoundException("patient n'existe pas");
         } else {
@@ -169,12 +169,12 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public ResponseEntity<String> bloquerMedecin(String sessionid, MedecinId medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<String> bloquerMedecin(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
         //on authenfie d'abord l'admin
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
-        Optional<Medecin> optionalMedecin = medecinServices.findById(medecinId.getId());
+        Optional<Medecin> optionalMedecin = medecinServices.findById(medecinId);
         if (optionalMedecin.isEmpty()) {
             throw new UserNotFoundException("Medecin n'existe pas");
         } else {
@@ -217,25 +217,14 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    @Override
-    public List<LocalTime> RdvIndisponibles(RendezVous rdv) {
-        Medecin medecin = rdv.getMedecin();
-        List<RendezVous> rendezVous = medecin.getMesrendezvous();
-        List<LocalTime> heuresindispo = new ArrayList<>();
-        for (RendezVous rdvDuMedecin : rendezVous) {
-            if (rdvDuMedecin.getStatusDemandeRdv().equals(StatusDemandeRdv.Accepter)) {
-                heuresindispo.add(rdvDuMedecin.getHeureRdv());
-            }
-        }
-        return heuresindispo;
-    }
+
 
     @Override
-    public ResponseEntity<Object> debloquerPatient(String sessionid, PatientId patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
+    public ResponseEntity<Object> debloquerPatient(String sessionid, Long patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
-        Optional<Patient> optionalPatient = patientServices.findById(patientId.getId());
+        Optional<Patient> optionalPatient = patientServices.findById(patientId);
         if (optionalPatient.isEmpty()) {
             throw new UserNotFoundException("patient n'existe pas");
         } else {
