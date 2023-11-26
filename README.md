@@ -53,7 +53,7 @@ III. Réalisation:
 
 I. Introduction:
 
-Enterprise Edition (J2EE) est une plateforme qui fournit une architecture pour le développement, la construction et le déploiement d’applications Web robustes, sécurisées et évolutives de notre site. En effet, l'utilisation de J2EE dans ce projet permet de faciliter la tâche pour développer la plateforme web de téléconsultation médicale qui à pour objectif de simplifier au patient et au médecin le gain de temps et de distance. 
+Enterprise Edition (J2EE) est une plateforme qui fournit une architecture pour le développement, la construction et le déploiement d’applications Web robustes, sécurisées et évolutives du site web. En effet, l'utilisation de J2EE dans ce projet permet de faciliter la tâche pour développer la plateforme web de téléconsultation médicale qui à pour objectif de simplifier au patient et au médecin le gain de temps et la distance. 
 
 II. Conception: 
 
@@ -77,7 +77,7 @@ Pour les sites web on l’appelle généralement « le webmaster ». C’est cel
 2. Language de Modélisation Unifié (UML);
 2.1. Diagramme de Cas d'Utilisation
 
-   .......
+ ![WhatsApp Image 2023-11-26 à 21 40 47_ec10d282](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/ab039dd7-4b74-41df-9e92-befadf401e13)
    
 2-2 Diagramme de Classe
 
