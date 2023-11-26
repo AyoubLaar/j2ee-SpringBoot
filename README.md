@@ -17,18 +17,26 @@
 I. Introduction;
 
 II. Conception:
-1. Phase Analyse
+1.Phase Analyse
+   
 1-1.Présentation des acteurs et actions 
-2. Language de Modélisation Unifié (UML);
+
+2.Language de Modélisation Unifié (UML)
+   
 2.1. Diagramme de Cas d'Utilisation
+
 2-2 Diagramme de Classe
    
 III. Réalisation:
 
-3. Langages et Environnement de Développement
+3.Langages et Environnement de Développement
+   
 3-1. Langages Utilisés
+
 3-2. Framework Utilisé
+
 3-3. Bibliothèque Utilisé
+
 3-4. Outils Utilisés 
 
 *Tables Des Figures:*
@@ -82,27 +90,61 @@ Pour les sites web on l’appelle généralement « le webmaster ». C’est cel
 
 2-2 Diagramme de Classe
 
-.......
+ ![class](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/b14a4f94-16c7-42e7-a9dc-d2ca50d69fb2)
 
-2.3page d'acceuil
+2.3page d'acceuil:
+
+la page d'acceuil va permettre à un utilisateur à rechercher des medecins et potentiellement s'inscrire dans le
+site durant sa navagation.
+
+![Image3](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/b588293f-0638-4061-a000-b60c6364608f)
+
+
 2.4 Interface signin(medecin ,patient,admin)
 
-L'implémentation de linterface Signin permettra aux medecins et patients à se connecter au site medical réaliser pour des différentes opérations. 
+L'implémentation de linterface Signin permettra aux medecins et patients à se connecter au site medical réaliser pour des différentes opérations.
+
+- signin admin:
+  
+![Image7](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/371b32cd-b127-4473-adeb-ac663cb63cb3)
+
+-signin (patients et medecins):
 
 ![Image4](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/2a543d9a-451a-43c3-9ca4-43656c909d99)
 
-2.5. Interface signup(medecin et patient)
+- Signup pour medecin:
+ 
+L'implémentation de linterface Signup permettra aux medecins à s'inscrire sur le site médical réaliser pour des différentes opérations. 
+  
+![Image6](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/02fd6422-7324-43d2-b588-59018c8795c0)
 
-L'implémentation de linterface Signup permettra aux medecins et patients à s'inscrire sur le site médical réaliser pour des différentes opérations. 
+2.5. Interface signup patient:
+
+L'implémentation de linterface Signup permettra aux patients à s'inscrire sur le site médical réaliser pour des différentes opérations. 
 
 ![Image5](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/5aee0ded-2bb5-4500-9b24-cca21b393f68)
-2.6 prise de rendez-vous
 
-2.7. Interface  dashboard(patient,medecin,admin)
+2.6 prise de rendez-vous:
+
+il s'agit de l'interface qui va permettre aux patients de rechercher de medecins de choisir le medecin pour faire le rendez-vous.
+
+![priserdv](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/1d9d77f0-8883-4f5d-8f82-b162251e789b)
+
+2.7. Interface  dashboard(patient,medecin,admin):
+
 L'implémentation de linterface dashboard permettra aux patients et medecins de réaliser des différentes opérations telle que consulter les demandes de rendez-vous et les rendez-vous à éffectuer .il permettra aussi a l'admin de gérer les patients et les medecins.
+  
    dashboard Admin:
+   
+   ![Image8](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/a656da78-ced0-4a82-bfd2-7e4fc3cde733)
+ 
    dashboard patient:
-   dashboard Medecin
+   
+   ![dashboardpatient](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/784418c9-9a99-4efc-853c-d294c20c7b63)
+   
+   dashboard Medecin:
+   
+   ![dashboardmedecin](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/83541815-4df9-4cac-9154-7ce23b9c7357)
 
 III. Réalisation:
 
@@ -142,9 +184,12 @@ Postman est une plateforme de développement d’API qui permet aux développeur
   - Le Github:
 Le GitHub est une plateforme de développement qui facilite la collaboration, la productivité et la sécurité pour les développeurs de tous niveaux et projets.
   
-![Image6](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/02fd6422-7324-43d2-b588-59018c8795c0)
-![Image7](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/371b32cd-b127-4473-adeb-ac663cb63cb3)
-![Image8](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/a656da78-ced0-4a82-bfd2-7e4fc3cde733)
-![Image3](https://github.com/AyoubLaar/j2ee-SpringBoot/assets/151503849/b588293f-0638-4061-a000-b60c6364608f)
- 
+
+
+
+
+
+
+
+
 
