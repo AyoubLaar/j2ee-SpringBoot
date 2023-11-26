@@ -42,12 +42,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid, MedecinToSearch medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<Object> chercherMedecin(@RequestHeader("token") String sessionid,
+                                                  MedecinToSearch medecin)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
-        List<Medecin> medecins = medecinServices.trouverParNomEtPrenom(medecin.getNom(),
-                medecin.getPrenom());
+        List<Medecin> medecins = medecinServices.trouverParNomEtPrenom(medecin.getNom().toLowerCase(),
+                medecin.getPrenom().toLowerCase());
         if (!medecins.isEmpty()) {
             List<Map<String, Object>> medecinstrouves = new ArrayList<>();
             for (Medecin medecinFound : medecins) {
@@ -83,7 +85,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<String> accepterOrRejectMedecin(String sessionid, AcceptOrReject medecin) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<String> accepterOrRejectMedecin(String sessionid, AcceptOrReject medecin)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         //on authentifie d'abord l'admin
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
@@ -102,7 +105,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Map<String, Object>> medecinDemand(String sessionid) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public List<Map<String, Object>> medecinDemand(String sessionid)
+            throws HandleIncorrectAuthentification, UserNotFoundException {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
@@ -123,12 +127,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<Object> chercherPatient(String sessionid, PatientToSearch patient) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<Object> chercherPatient(String sessionid, PatientToSearch patient)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
         //puis on commence la recherche ville nom et prenom
-        List<Patient> patients = patientServices.trouverParPrenomEtNom(patient.getPrenom(), patient.getNom());
+        List<Patient> patients = patientServices.trouverParPrenomEtNom(patient.getPrenom().toLowerCase(), patient.getNom().toLowerCase());
         if (!patients.isEmpty()) {
             List<Map<String, Object>> patientstrouves = new ArrayList<>();
             for (Patient patientfound : patients) {
@@ -148,7 +153,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public ResponseEntity<Object> bloquerPatient(String sessionid,Long patientId) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<Object> bloquerPatient(String sessionid,Long patientId)
+            throws HandleIncorrectAuthentification, UserNotFoundException {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }
@@ -173,7 +179,8 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public ResponseEntity<String> bloquerMedecin(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<String> bloquerMedecin(String sessionid, Long medecinId)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         //on authenfie d'abord l'admin
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
@@ -199,7 +206,8 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public ResponseEntity<String> authentifierUser(User user) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<String> authentifierUser(User user)
+            throws HandleIncorrectAuthentification, UserNotFoundException {
         Optional<Admin> optionalAdmin = adminRepository.findBylogin(user.getLogin());
         if (optionalAdmin.isPresent()) {
             Admin admin = optionalAdmin.get();
@@ -222,9 +230,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-
+    @Transactional
     @Override
-    public ResponseEntity<Object> debloquerPatient(String sessionid, Long patientId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
+    public ResponseEntity<Object> debloquerPatient(String sessionid, Long patientId)
+            throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
         if (!verifierAuthentification.verifyAuthentificationAdmin(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifie");
         }

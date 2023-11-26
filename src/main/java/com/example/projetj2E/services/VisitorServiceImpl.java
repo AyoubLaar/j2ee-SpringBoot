@@ -34,10 +34,10 @@ public class VisitorServiceImpl implements VisitorService{
         Specialite medspecialite = Specialite.builder()
                 .nomDuSpecialite(medecinToSearch.getSpecialite())
                 .build();
-        Ville ville = new Ville(medecinToSearch.getVille());
+        Ville ville = new Ville(medecinToSearch.getVille().toLowerCase());
         if(!(medecinToSearch.getNom()==null)){
             List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialitesAndNom(ville, medspecialite
-                    ,medecinToSearch.getNom());
+                    ,medecinToSearch.getNom().toLowerCase());
             if (medecins.isEmpty()) {
                 throw new UserNotFoundException("Medecin non trouvé");
             }

@@ -23,7 +23,7 @@ public class MedecinModel {
     private String prenom;
     private LocalDate dateDeNaissance;
     private String codeOrdreMedecin;
-    private Ville ville;
+    private String ville;
     private String adressCabinet;
     private Sexe sexe;
     private List<String> specialites;

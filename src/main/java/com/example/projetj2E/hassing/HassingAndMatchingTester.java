@@ -31,6 +31,7 @@ public class HassingAndMatchingTester {
             System.out.println(cipherText + "  ----> " + plainText);
             message_init = message_init+message_init;
         }
+        System.out.println("message_init = " + passwordtohash("hopital"));
     }
 
     public static String encrypt( String input) {

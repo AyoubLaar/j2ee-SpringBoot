@@ -2,6 +2,7 @@ package com.example.projetj2E.controllers;
 
 import com.example.projetj2E.entites.Specialite;
 import com.example.projetj2E.repository.SpecialiteRepository;
+import com.example.projetj2E.services.SpecialiteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SpecialiteControllerIntegrationTest {
 
@@ -25,16 +25,15 @@ class SpecialiteControllerIntegrationTest {
     @Autowired
     private SpecialiteRepository specialiteRepository;
 
+    @Autowired
+    private SpecialiteService specialiteService;
+
     @BeforeEach
     void setUp() {
         // Ajouter des données de test dans la base de données
-        Specialite specialite1 = Specialite.builder()
-                .nomDuSpecialite("chirurgien")
-                .build();
-        Specialite specialite2 = Specialite.builder()
-                .nomDuSpecialite("oncologue")
-                .build();
-        specialiteRepository.saveAll(List.of(specialite1, specialite2));
+        specialiteService.saveAlltheSpecialities(List.of("Medecin Généraliste", "Pédiatre", "psychiatre",
+                "Gynécologue", "Dermatologue", "Chirurgien", "Oncologue", "Therapeute", "Allergologue",
+                "Ophtalmologue", "Rhumatologues"));
     }
 
     @Test
@@ -53,8 +52,11 @@ class SpecialiteControllerIntegrationTest {
         // Vérifier les données retournées
         List<String> specialites = response.getBody();
         assertNotNull(specialites);
-        assertEquals(2, specialites.size());
-        assertTrue(specialites.contains("chirurgien"));
-        assertTrue(specialites.contains("oncologue"));
+        assertEquals(11, specialites.size()); // Vérifier le nombre total de spécialités ajoutées
+        assertTrue(specialites.contains("Medecin Généraliste"));
+        assertTrue(specialites.contains("Chirurgien"));
+        // Assurez-vous que toutes les spécialités ajoutées sont présentes dans la réponse
+        assertTrue(specialites.containsAll(List.of("Pédiatre", "psychiatre", "Gynécologue", "Dermatologue",
+                "Oncologue", "Therapeute", "Allergologue", "Ophtalmologue", "Rhumatologues")));
     }
 }

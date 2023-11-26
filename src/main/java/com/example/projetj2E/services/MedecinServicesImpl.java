@@ -48,15 +48,17 @@ public class MedecinServicesImpl implements MedecinServices {
     }
 
     @Override
-    public ResponseEntity<String> registerMedecin(MedecinModel medecinModel) throws GereExistEmailException {
+    public ResponseEntity<String> registerMedecin(MedecinModel medecinModel)
+            throws GereExistEmailException {
+        Ville ville=new Ville(medecinModel.getVille().toLowerCase());
         Medecin medecin = new Medecin();
-        medecin.setAdressCabinet(medecinModel.getAdressCabinet());
+        medecin.setAdressCabinet(medecinModel.getAdressCabinet().toLowerCase());
         medecin.setCodeOrdreMedecin(medecinModel.getCodeOrdreMedecin());
-        medecin.setNom(medecinModel.getNom());
+        medecin.setNom(medecinModel.getNom().toLowerCase());
         medecin.setSexe(medecinModel.getSexe());
         medecin.setPassword(HassingAndMatchingTester.passwordtohash(medecinModel.getPassword()));
-        medecin.setPrenom(medecinModel.getPrenom());
-        medecin.setVille(medecinModel.getVille());
+        medecin.setPrenom(medecinModel.getPrenom().toLowerCase());
+        medecin.setVille(ville);
         medecin.setDateDeNaissance(medecinModel.getDateDeNaissance());
         medecin.setStatusDemande(StatusMedecin.Attente);
         if ((medecinRepository.findByMedLogin(medecinModel.getMedLogin()).isPresent())) {
@@ -83,7 +85,8 @@ public class MedecinServicesImpl implements MedecinServices {
 
 
     @Override
-    public ResponseEntity<String> authentifierUser(User medecin) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<String> authentifierUser(User medecin)
+            throws HandleIncorrectAuthentification, UserNotFoundException {
         Optional<Medecin> optionalMedecin = medecinRepository.findByMedLogin(medecin.getLogin());
         if (optionalMedecin.isPresent()) {
             Medecin medecinfound=optionalMedecin.get();
@@ -108,7 +111,8 @@ public class MedecinServicesImpl implements MedecinServices {
 
 
     @Override
-    public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<Object> mesDemandeDeRdv(@RequestHeader("token") String sessionid)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         if (verifierAuthentification.verifyAuthentificationMedecin(sessionid)) {
             Medecin medecin = authentificationService.toMedecin(sessionid);
             List<RendezVous> tousmesrdv = medecin.getMesrendezvous();
@@ -183,7 +187,8 @@ public class MedecinServicesImpl implements MedecinServices {
     }
 
     @Override
-    public ResponseEntity<Object> mesRdv(String sessionid) throws HandleIncorrectAuthentification, UserNotFoundException {
+    public ResponseEntity<Object> mesRdv(String sessionid)
+            throws HandleIncorrectAuthentification, UserNotFoundException {
         if (!verifierAuthentification.verifyAuthentificationMedecin(sessionid)){
             throw new HandleIncorrectAuthentification("Non authentifié");
         }
@@ -225,7 +230,8 @@ public class MedecinServicesImpl implements MedecinServices {
     }
 
     @Override
-    public ResponseEntity<String> annulerRdv(Long rdvId, String sessionId) throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
+    public ResponseEntity<String> annulerRdv(Long rdvId, String sessionId)
+            throws HandleIncorrectAuthentification, UserNotFoundException, RendezVousNotFound {
         if (!verifierAuthentification.verifyAuthentificationMedecin(sessionId)){
             throw new HandleIncorrectAuthentification("Non authentifié");
         }

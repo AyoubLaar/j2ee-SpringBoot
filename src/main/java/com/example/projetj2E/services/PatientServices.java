@@ -28,4 +28,6 @@ public interface PatientServices {
     ResponseEntity<Object> mesRdv(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
 
     ResponseEntity<Object> mesDemandes(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification;
+
+
 }

@@ -58,8 +58,8 @@ public class PatientServiceImpl implements PatientServices{
             throw  new GereExistEmailException("email déja utilisé");
         }
         Patient patient=new Patient();
-        patient.setNom(patientModel.getNom());
-        patient.setPrenom(patientModel.getPrenom());
+        patient.setNom(patientModel.getNom().toLowerCase());
+        patient.setPrenom(patientModel.getPrenom().toLowerCase());
         patient.setDateDeNaissance(patientModel.getDateDeNaissance());
         patient.setSexe(patientModel.getSexe());
         patient.setPassword(HassingAndMatchingTester.passwordtohash(patientModel.getPassword()));
@@ -101,7 +101,8 @@ public class PatientServiceImpl implements PatientServices{
         }
     }
     @Override
-     public ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch) throws UserNotFoundException, HandleIncorrectAuthentification {
+     public ResponseEntity<Object> chercherMedecin(String sessionid, MedecinToSearch medecinToSearch)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         // authentifier patient
         if (!verifierAuthentification.verifyAuthentificationPatient(sessionid)) {
             throw new HandleIncorrectAuthentification("Non Authentifié");
@@ -109,10 +110,10 @@ public class PatientServiceImpl implements PatientServices{
         Specialite medspecialite = Specialite.builder()
                 .nomDuSpecialite(medecinToSearch.getSpecialite())
                 .build();
-        Ville ville = new Ville(medecinToSearch.getVille());
+        Ville ville = new Ville(medecinToSearch.getVille().toLowerCase());
         if(!(medecinToSearch.getNom()==null)){
             List<Medecin> medecins = medecinRepository.findAllByVilleAndSpecialitesAndNom(ville, medspecialite
-                    ,medecinToSearch.getNom());
+                    ,medecinToSearch.getNom().toLowerCase());
             if (medecins.isEmpty()) {
                 throw new UserNotFoundException("Medecin non trouvé");
             }
@@ -163,7 +164,8 @@ public class PatientServiceImpl implements PatientServices{
 
 
     @Override
-    public ResponseEntity<Object> mesRdv(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<Object> mesRdv(String sessionid)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         if (!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
             throw new HandleIncorrectAuthentification("Non authentifié");
         }
@@ -190,7 +192,8 @@ public class PatientServiceImpl implements PatientServices{
     }
 
     @Override
-    public ResponseEntity<Object> mesDemandes(String sessionid) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public ResponseEntity<Object> mesDemandes(String sessionid)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         if (verifierAuthentification.verifyAuthentificationPatient(sessionid)) {
             Patient patient = authentificationService.toPatient(sessionid);
             List<RendezVous> tousmesrdv = patient.getMesrendezvous();
@@ -216,8 +219,10 @@ public class PatientServiceImpl implements PatientServices{
         }
     }
 
+
     @Override
-    public  ResponseEntity<Object> disponibilites(String sessionid, Long medecinId) throws UserNotFoundException, HandleIncorrectAuthentification {
+    public  ResponseEntity<Object> disponibilites(String sessionid, Long medecinId)
+            throws UserNotFoundException, HandleIncorrectAuthentification {
         if(!verifierAuthentification.verifyAuthentificationPatient(sessionid)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }
@@ -236,7 +241,8 @@ public class PatientServiceImpl implements PatientServices{
 
     @Transactional
     @Override
-    public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel) throws UserNotFoundException, HandleIncorrectAuthentification, RendezVousExisteDeja {
+    public ResponseEntity<String> choisirUnRdv(String sessionId, RdvModel rdvModel)
+            throws UserNotFoundException, HandleIncorrectAuthentification, RendezVousExisteDeja {
         if(!verifierAuthentification.verifyAuthentificationPatient(sessionId)){
             throw new HandleIncorrectAuthentification("Non Authentifié");
         }

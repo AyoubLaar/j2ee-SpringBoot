@@ -9,5 +9,6 @@ public enum StatusRdv {
          le rdv peut etre reporte suite au suspension du compte du medecin ou patient par l'admin
          le rdv peut etre annuler soit par le medecin ou le patient
 
+
      */
 }
